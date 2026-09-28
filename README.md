@@ -23,3 +23,7 @@ flutter build web
 ```
 
 Product scope and data policy are in [`docs/product.md`](docs/product.md). Visual direction and accessibility decisions are in [`docs/design.md`](docs/design.md).
+
+## Repository skills
+
+Project-specific Codex skills live in [`.agents/skills/`](.agents/skills/). They cover natural Japanese copy, design-engineering polish, mobile web behavior, and restrained motion design/review. Source attribution and licenses are documented in [`.agents/README.md`](.agents/README.md).
