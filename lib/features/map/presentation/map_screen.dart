@@ -111,81 +111,83 @@ class _MapPreview extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     color: SideBColors.ink,
     child: LayoutBuilder(
-      builder:
-          (context, constraints) => Stack(
-            children: [
-              const Positioned.fill(
-                child: CustomPaint(painter: _TokyoLinesPainter()),
-              ),
-              ...mockVenues.asMap().entries.map((entry) {
-                final venue = entry.value;
-                return Positioned(
-                  left: venue.mapX * constraints.maxWidth,
-                  top: venue.mapY * constraints.maxHeight,
-                  child: FractionalTranslation(
-                    translation: const Offset(-.5, -.5),
-                    child: Semantics(
-                      button: true,
-                      label: '${venue.name}, ${venue.area}',
-                      child: Tooltip(
-                        message: '${venue.name} / ${venue.area}',
-                        child: InkWell(
-                          onTap:
-                              () => Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder:
-                                      (_) => VenueDetailScreen(
-                                        venue: venue,
-                                        savedVenues: savedVenues,
-                                      ),
-                                ),
-                              ),
-                          borderRadius: BorderRadius.circular(SideBRadii.round),
-                          child: Container(
-                            width: entry.key == 0 ? 44 : 34,
-                            height: entry.key == 0 ? 44 : 34,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color:
-                                  entry.key == 0
-                                      ? SideBColors.vermilion
-                                      : SideBColors.ivory,
-                              border: Border.all(
-                                color: SideBColors.ink,
-                                width: 2,
+      builder: (context, constraints) {
+        final languageCode = AppLocalizations.of(context).locale.languageCode;
+        return Stack(
+          children: [
+            const Positioned.fill(
+              child: CustomPaint(painter: _TokyoLinesPainter()),
+            ),
+            ...mockVenues.asMap().entries.map((entry) {
+              final venue = entry.value;
+              return Positioned(
+                left: venue.mapX * constraints.maxWidth,
+                top: venue.mapY * constraints.maxHeight,
+                child: FractionalTranslation(
+                  translation: const Offset(-.5, -.5),
+                  child: Semantics(
+                    button: true,
+                    label: '${venue.name}, ${venue.areaFor(languageCode)}',
+                    child: Tooltip(
+                      message: '${venue.name} / ${venue.areaFor(languageCode)}',
+                      child: InkWell(
+                        onTap:
+                            () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder:
+                                    (_) => VenueDetailScreen(
+                                      venue: venue,
+                                      savedVenues: savedVenues,
+                                    ),
                               ),
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              '${entry.key + 1}',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.labelLarge?.copyWith(
-                                color:
-                                    entry.key == 0
-                                        ? SideBColors.white
-                                        : SideBColors.ink,
-                              ),
+                        borderRadius: BorderRadius.circular(SideBRadii.round),
+                        child: Container(
+                          width: entry.key == 0 ? 44 : 34,
+                          height: entry.key == 0 ? 44 : 34,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                entry.key == 0
+                                    ? SideBColors.vermilion
+                                    : SideBColors.ivory,
+                            border: Border.all(
+                              color: SideBColors.ink,
+                              width: 2,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${entry.key + 1}',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.labelLarge?.copyWith(
+                              color:
+                                  entry.key == 0
+                                      ? SideBColors.white
+                                      : SideBColors.ink,
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                );
-              }),
-              Positioned(
-                left: SideBSpacing.md,
-                bottom: SideBSpacing.md,
-                child: Text(
-                  'TOKYO / SCHEMATIC',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelLarge?.copyWith(color: SideBColors.ivory),
                 ),
+              );
+            }),
+            Positioned(
+              left: SideBSpacing.md,
+              bottom: SideBSpacing.md,
+              child: Text(
+                'TOKYO / SCHEMATIC',
+                style: Theme.of(
+                  context,
+                ).textTheme.labelLarge?.copyWith(color: SideBColors.ivory),
               ),
-            ],
-          ),
+            ),
+          ],
+        );
+      },
     ),
   );
 }

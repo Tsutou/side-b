@@ -3,10 +3,9 @@
     "short_name": "SIDE B",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#F2EEE5",
-    "theme_color": "#191816",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#F3ECD9",
+    "theme_color": "#20283A",
+    "description": "東京で、音を聴くために訪れたい場所を案内するミュージックバーガイド。",
     "prefer_related_applications": false,
     "icons": [
         {

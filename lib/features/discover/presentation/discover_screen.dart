@@ -41,7 +41,12 @@ class DiscoverScreen extends StatelessWidget {
         ),
         SliverToBoxAdapter(child: _MockNotice(label: copy.t('mockNotice'))),
         SliverToBoxAdapter(child: _Hero(savedVenues: savedVenues)),
-        SliverToBoxAdapter(child: _EditorialNote(title: copy.t('editorsNote'))),
+        SliverToBoxAdapter(
+          child: _EditorialNote(
+            title: copy.t('editorsNote'),
+            body: copy.t('editorsNoteBody'),
+          ),
+        ),
         SliverToBoxAdapter(
           child: _SectionHeading(
             title: copy.t('lateSection'),
@@ -53,7 +58,7 @@ class DiscoverScreen extends StatelessWidget {
         SliverToBoxAdapter(
           child: _SectionHeading(
             title: copy.t('allPlaces'),
-            body: 'Seven fictional addresses for the first SIDE B prototype.',
+            body: copy.t('allPlacesBody'),
             issue: '04—07',
           ),
         ),
@@ -126,6 +131,7 @@ class _Hero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final copy = AppLocalizations.of(context);
+    final languageCode = copy.locale.languageCode;
     final venue = mockVenues.first;
     final isJapanese = copy.locale.languageCode == 'ja';
     return Center(
@@ -181,7 +187,7 @@ class _Hero extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            '${venue.name} / ${venue.area}',
+                            '${venue.name} / ${venue.areaFor(languageCode)}',
                             style: Theme.of(context).textTheme.labelLarge
                                 ?.copyWith(color: SideBColors.ink),
                           ),
@@ -194,8 +200,7 @@ class _Hero extends StatelessWidget {
               );
               final image = Semantics(
                 image: true,
-                label:
-                    'Original painted illustration of a fictional Tokyo listening bar',
+                label: copy.t('heroImageLabel'),
                 child: Material(
                   color: SideBColors.ink,
                   child: Stack(
@@ -230,7 +235,7 @@ class _Hero extends StatelessWidget {
                         right: SideBSpacing.md,
                         bottom: SideBSpacing.md,
                         child: Text(
-                          '${venue.name}  /  ${venue.area}',
+                          '${venue.name}  /  ${venue.areaFor(languageCode)}',
                           style: Theme.of(context).textTheme.labelLarge
                               ?.copyWith(color: SideBColors.paper),
                         ),
@@ -300,8 +305,9 @@ class _RecordStamp extends StatelessWidget {
 }
 
 class _EditorialNote extends StatelessWidget {
-  const _EditorialNote({required this.title});
+  const _EditorialNote({required this.title, required this.body});
   final String title;
+  final String body;
 
   @override
   Widget build(BuildContext context) => Center(
@@ -324,7 +330,7 @@ class _EditorialNote extends StatelessWidget {
             const SizedBox(width: SideBSpacing.xl),
             Expanded(
               child: Text(
-                'Not every bar with good music is a music bar. This first edition follows the rooms where the system, the selector, and the record shelf shape the night.',
+                body,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),

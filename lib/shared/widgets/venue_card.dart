@@ -20,8 +20,9 @@ class VenueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final detailLabel =
-        '${AppLocalizations.of(context).t('details')}: ${venue.name}';
+    final copy = AppLocalizations.of(context);
+    final languageCode = copy.locale.languageCode;
+    final detailLabel = '${copy.t('details')}: ${venue.name}';
     return Semantics(
       button: true,
       label: detailLabel,
@@ -65,7 +66,7 @@ class VenueCard extends StatelessWidget {
                         vertical: SideBSpacing.xxs,
                       ),
                       child: Text(
-                        venue.area,
+                        venue.areaFor(languageCode),
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
@@ -100,7 +101,7 @@ class VenueCard extends StatelessWidget {
             ),
             const SizedBox(height: SideBSpacing.xxs),
             Text(
-              '${venue.typeLabel}  /  ${venue.genres.take(2).join(' · ')}',
+              '${venue.typeLabelFor(languageCode)}  /  ${venue.genres.take(2).join(' · ')}',
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 color: SideBColors.vermilion,
                 letterSpacing: .8,
@@ -108,7 +109,7 @@ class VenueCard extends StatelessWidget {
             ),
             const SizedBox(height: SideBSpacing.xs),
             Text(
-              venue.editorialNote,
+              venue.editorialNoteFor(languageCode),
               style: Theme.of(context).textTheme.bodyMedium,
               maxLines: compact ? 2 : 3,
               overflow: TextOverflow.ellipsis,

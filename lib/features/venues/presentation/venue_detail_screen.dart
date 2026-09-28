@@ -18,6 +18,7 @@ class VenueDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final copy = AppLocalizations.of(context);
+    final languageCode = copy.locale.languageCode;
     return Scaffold(
       backgroundColor: SideBColors.ivory,
       body: SafeArea(
@@ -55,8 +56,7 @@ class VenueDetailScreen extends StatelessWidget {
                       final wide = constraints.maxWidth >= 760;
                       final image = Semantics(
                         image: true,
-                        label:
-                            'Fictional interior photograph for ${venue.name}',
+                        label: '${copy.t('detailImageLabel')}: ${venue.name}',
                         child: Image.asset(
                           'assets/images/listening-room.png',
                           fit: BoxFit.cover,
@@ -71,7 +71,7 @@ class VenueDetailScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'FICTIONAL PLACE / MOCK DATA',
+                              copy.t('mockPlaceLabel'),
                               style: Theme.of(context).textTheme.labelLarge
                                   ?.copyWith(color: SideBColors.vermilion),
                             ),
@@ -83,12 +83,12 @@ class VenueDetailScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: SideBSpacing.sm),
                             Text(
-                              '${venue.area}  /  ${venue.typeLabel}',
+                              '${venue.areaFor(languageCode)}  /  ${venue.typeLabelFor(languageCode)}',
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                             const SizedBox(height: SideBSpacing.xl),
                             Text(
-                              venue.editorialNote,
+                              venue.editorialNoteFor(languageCode),
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
                           ],
@@ -136,7 +136,10 @@ class VenueDetailScreen extends StatelessWidget {
                           spacing: SideBSpacing.xxl,
                           runSpacing: SideBSpacing.lg,
                           children: [
-                            _Fact(label: copy.t('area'), value: venue.area),
+                            _Fact(
+                              label: copy.t('area'),
+                              value: venue.areaFor(languageCode),
+                            ),
                             _Fact(label: copy.t('hours'), value: venue.hours),
                             _Fact(label: copy.t('price'), value: venue.price),
                             _Fact(
@@ -153,7 +156,7 @@ class VenueDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: SideBSpacing.sm),
                         Text(
-                          venue.editorialNote,
+                          venue.editorialNoteFor(languageCode),
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         const SizedBox(height: SideBSpacing.xl),
@@ -161,7 +164,8 @@ class VenueDetailScreen extends StatelessWidget {
                           spacing: SideBSpacing.xs,
                           runSpacing: SideBSpacing.xs,
                           children:
-                              venue.signals
+                              venue
+                                  .signalsFor(languageCode)
                                   .map((signal) => _Signal(label: signal))
                                   .toList(),
                         ),

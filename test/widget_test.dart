@@ -3,9 +3,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:side_b/app/side_b_app.dart';
 import 'package:side_b/features/saved/application/saved_venues_controller.dart';
+import 'package:side_b/features/venues/data/mock_venues.dart';
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
+
+  test('provides Japanese and English venue copy', () {
+    final venue = mockVenues.first;
+
+    expect(venue.areaFor('ja'), '神保町');
+    expect(venue.areaFor('en'), 'JINBŌCHŌ');
+    expect(venue.editorialNoteFor('ja'), '細長い店内で、レコードのB面を最後まで聴く。');
+    expect(
+      venue.editorialNoteFor('en'),
+      'A narrow room where the second side gets played in full.',
+    );
+  });
 
   testWidgets('shows the editorial discover shell and mock-data notice', (
     tester,
@@ -22,6 +35,7 @@ void main() {
     expect(find.text('見つける'), findsOneWidget);
     expect(find.text('地図'), findsOneWidget);
     expect(find.text('保存'), findsOneWidget);
+    expect(find.textContaining('神保町'), findsWidgets);
     expect(find.byType(NavigationBar), findsOneWidget);
     expect(find.byType(SegmentedButton<String>), findsOneWidget);
     final context = tester.element(find.byType(Scaffold).first);
@@ -54,6 +68,7 @@ void main() {
 
     expect(find.text('Places worth\nlistening to.'), findsOneWidget);
     expect(find.text('Map'), findsOneWidget);
+    expect(find.textContaining('JINBŌCHŌ'), findsWidgets);
     final title = tester.widget<Text>(find.text('Places worth\nlistening to.'));
     expect(title.style?.fontFamily, 'Futura');
     final brand = tester.widget<Text>(find.text('SIDE B'));
