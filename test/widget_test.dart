@@ -13,7 +13,7 @@ void main() {
 
     expect(venue.areaFor('ja'), '神保町');
     expect(venue.areaFor('en'), 'JINBŌCHŌ');
-    expect(venue.editorialNoteFor('ja'), '細長い店内で、レコードのB面を最後まで聴く。');
+    expect(venue.editorialNoteFor('ja'), '細長い店内で、B面まで通して聴く。');
     expect(
       venue.editorialNoteFor('en'),
       'A narrow room where the second side gets played in full.',
@@ -28,11 +28,11 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('SIDE B'), findsOneWidget);
-    expect(find.text('聴くために、\n訪れたい場所。'), findsOneWidget);
-    final title = tester.widget<Text>(find.text('聴くために、\n訪れたい場所。'));
+    expect(find.text('音を聴きに、\n行きたい店。'), findsOneWidget);
+    final title = tester.widget<Text>(find.text('音を聴きに、\n行きたい店。'));
     expect(title.style?.fontFamily, 'NotoSansJP');
     expect(find.textContaining('架空の特集'), findsOneWidget);
-    expect(find.text('見つける'), findsOneWidget);
+    expect(find.text('ガイド'), findsOneWidget);
     expect(find.text('地図'), findsOneWidget);
     expect(find.text('保存'), findsOneWidget);
     expect(find.textContaining('神保町'), findsWidgets);
@@ -96,7 +96,7 @@ void main() {
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
 
-    final title = tester.widget<Text>(find.text('聴くために、\n訪れたい場所。'));
+    final title = tester.widget<Text>(find.text('音を聴きに、\n行きたい店。'));
 
     expect(title.style?.fontSize, 44);
     expect(title.style?.height, 1.08);
@@ -111,7 +111,7 @@ void main() {
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
 
-    expect(find.text('聴くために、\n訪れたい場所。'), findsOneWidget);
+    expect(find.text('音を聴きに、\n行きたい店。'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

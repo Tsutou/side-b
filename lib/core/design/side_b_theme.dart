@@ -98,7 +98,7 @@ abstract final class SideBTheme {
           return IconThemeData(
             color:
                 states.contains(WidgetState.selected)
-                    ? SideBColors.ivory
+                    ? SideBColors.ink
                     : SideBColors.warmGray,
             size: 22,
           );

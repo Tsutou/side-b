@@ -141,11 +141,11 @@ class _EmptySaved extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.bookmark_border,
                 size: 44,
                 color: SideBColors.vermilion,
-                semanticLabel: 'Empty saved list',
+                semanticLabel: copy.t('emptySavedIcon'),
               ),
               const SizedBox(height: SideBSpacing.lg),
               Text(

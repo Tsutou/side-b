@@ -318,23 +318,37 @@ class _EditorialNote extends StatelessWidget {
           horizontal: SideBSpacing.lg,
           vertical: SideBSpacing.display,
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final label = Text(
               title,
               style: Theme.of(
                 context,
               ).textTheme.labelLarge?.copyWith(color: SideBColors.vermilion),
-            ),
-            const SizedBox(width: SideBSpacing.xl),
-            Expanded(
-              child: Text(
-                body,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ),
-          ],
+            );
+            final note = Text(
+              body,
+              style: Theme.of(context).textTheme.headlineMedium,
+            );
+            if (constraints.maxWidth < 560) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  label,
+                  const SizedBox(height: SideBSpacing.md),
+                  note,
+                ],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(width: 112, child: label),
+                const SizedBox(width: SideBSpacing.xl),
+                Expanded(child: note),
+              ],
+            );
+          },
         ),
       ),
     ),

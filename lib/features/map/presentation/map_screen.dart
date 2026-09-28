@@ -120,6 +120,18 @@ class _MapPreview extends StatelessWidget {
             ),
             ...mockVenues.asMap().entries.map((entry) {
               final venue = entry.value;
+              void openVenue() {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder:
+                        (_) => VenueDetailScreen(
+                          venue: venue,
+                          savedVenues: savedVenues,
+                        ),
+                  ),
+                );
+              }
+
               return Positioned(
                 left: venue.mapX * constraints.maxWidth,
                 top: venue.mapY * constraints.maxHeight,
@@ -128,44 +140,44 @@ class _MapPreview extends StatelessWidget {
                   child: Semantics(
                     button: true,
                     label: '${venue.name}, ${venue.areaFor(languageCode)}',
-                    child: Tooltip(
-                      message: '${venue.name} / ${venue.areaFor(languageCode)}',
-                      child: InkWell(
-                        onTap:
-                            () => Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder:
-                                    (_) => VenueDetailScreen(
-                                      venue: venue,
-                                      savedVenues: savedVenues,
-                                    ),
+                    onTap: openVenue,
+                    child: ExcludeSemantics(
+                      child: Tooltip(
+                        message:
+                            '${venue.name} / ${venue.areaFor(languageCode)}',
+                        child: InkWell(
+                          onTap: openVenue,
+                          borderRadius: BorderRadius.circular(SideBRadii.round),
+                          child: SizedBox.square(
+                            dimension: SideBSizes.tapTarget,
+                            child: Center(
+                              child: Container(
+                                width: entry.key == 0 ? 44 : 34,
+                                height: entry.key == 0 ? 44 : 34,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color:
+                                      entry.key == 0
+                                          ? SideBColors.vermilion
+                                          : SideBColors.ivory,
+                                  border: Border.all(
+                                    color: SideBColors.ink,
+                                    width: 2,
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${entry.key + 1}',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelLarge?.copyWith(
+                                    color:
+                                        entry.key == 0
+                                            ? SideBColors.white
+                                            : SideBColors.ink,
+                                  ),
+                                ),
                               ),
-                            ),
-                        borderRadius: BorderRadius.circular(SideBRadii.round),
-                        child: Container(
-                          width: entry.key == 0 ? 44 : 34,
-                          height: entry.key == 0 ? 44 : 34,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:
-                                entry.key == 0
-                                    ? SideBColors.vermilion
-                                    : SideBColors.ivory,
-                            border: Border.all(
-                              color: SideBColors.ink,
-                              width: 2,
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            '${entry.key + 1}',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.labelLarge?.copyWith(
-                              color:
-                                  entry.key == 0
-                                      ? SideBColors.white
-                                      : SideBColors.ink,
                             ),
                           ),
                         ),
