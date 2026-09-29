@@ -17,6 +17,7 @@ const mockVenues = <Venue>[
     mapX: .48,
     mapY: .39,
     imageAlignment: -.35,
+    imageAsset: 'assets/images/venue-listening-amber.jpg',
   ),
   Venue(
     id: 'kissa-nagi',
@@ -34,6 +35,7 @@ const mockVenues = <Venue>[
     mapX: .18,
     mapY: .44,
     imageAlignment: .55,
+    imageAsset: 'assets/images/venue-jazz-rain.jpg',
   ),
   Venue(
     id: 'after-image',
@@ -51,6 +53,7 @@ const mockVenues = <Venue>[
     mapX: .45,
     mapY: .70,
     imageAlignment: .1,
+    imageAsset: 'assets/images/venue-listening-amber.jpg',
   ),
   Venue(
     id: 'blue-hour',
@@ -68,6 +71,7 @@ const mockVenues = <Venue>[
     mapX: .75,
     mapY: .28,
     imageAlignment: -.7,
+    imageAsset: 'assets/images/venue-jazz-rain.jpg',
   ),
   Venue(
     id: 'meter',
@@ -85,6 +89,7 @@ const mockVenues = <Venue>[
     mapX: .21,
     mapY: .72,
     imageAlignment: .75,
+    imageAsset: 'assets/images/venue-dj-midnight.jpg',
   ),
   Venue(
     id: 'saido',
@@ -102,6 +107,7 @@ const mockVenues = <Venue>[
     mapX: .76,
     mapY: .55,
     imageAlignment: -.1,
+    imageAsset: 'assets/images/listening-room.png',
   ),
   Venue(
     id: 'lantern',
@@ -119,5 +125,6 @@ const mockVenues = <Venue>[
     mapX: .08,
     mapY: .35,
     imageAlignment: .35,
+    imageAsset: 'assets/images/venue-listening-amber.jpg',
   ),
 ];

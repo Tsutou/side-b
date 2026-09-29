@@ -4,6 +4,8 @@
 
 The interface should feel edited, curious, cultural, and slightly nostalgic without becoming a record-shop costume. Its pacing borrows from Japanese city magazines: an assertive masthead, warm paper, practical captions, surprising image crops, and deliberate negative space. Record culture enters through the 33⅓ motif, jacket-like hero composition, and one expressive painted scene rather than through decorative vinyl clichés everywhere.
 
+The map is the primary editorial surface: a full-width, jacket-like night map pairs numbered markers with one selected venue story. The map owns the visual density; the surrounding page stays quiet so the interface feels collected rather than decorated.
+
 ## Visual system
 
 - **Ink** `#191816`: navigation, night surfaces, primary text.
@@ -28,6 +30,7 @@ Material 3 is the interaction and component foundation. Navigation uses `Navigat
 
 - `BrandHeader`: publication identity, edition, and language switch.
 - `VenueCard`: image, area, venue type, sound, editorial observation, save action.
+- `MapPreview`: layered Tokyo schematic, accessible numbered markers, and a single crossfading venue preview.
 - `SaveButton`: a 48px accessible toggle with semantic and tooltip labels.
 - `BottomNavigation`: three primary destinations with text on the active item.
 - Detail facts and venue signals: bordered factual units, not decorative pills.
@@ -47,4 +50,4 @@ The content column is capped at 1120px. Editorial splits become vertical below 6
 
 ## Imagery
 
-The hero is an original AI-generated figurative painting of a fictional listening bar, art-directed around the broader visual language of late-1970s record sleeves: rhythmic group movement, elongated gestures, warm oil texture, and a dense listening-room atmosphere. It does not reproduce a named artist's work or an existing jacket composition. Supporting venue photography is also fictional. Production imagery will require provenance, permission, alt text, and clear association with verified place records.
+The hero is an original AI-generated figurative painting of a fictional listening bar, art-directed around the broader visual language of late-1970s record sleeves: rhythmic group movement, elongated gestures, warm oil texture, and a dense listening-room atmosphere. It does not reproduce a named artist's work or an existing jacket composition. Supporting venue photography is also original and fictional, with distinct amber listening-bar, rain-lit jazz-kissa, and midnight DJ-room scenes to avoid repetitive cards. Production imagery will require provenance, permission, alt text, and clear association with verified place records.

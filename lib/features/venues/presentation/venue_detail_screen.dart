@@ -58,7 +58,7 @@ class VenueDetailScreen extends StatelessWidget {
                         image: true,
                         label: '${copy.t('detailImageLabel')}: ${venue.name}',
                         child: Image.asset(
-                          'assets/images/listening-room.png',
+                          venue.imageAsset,
                           fit: BoxFit.cover,
                           alignment: Alignment(venue.imageAlignment, 0),
                         ),

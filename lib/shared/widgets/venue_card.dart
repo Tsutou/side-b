@@ -57,7 +57,7 @@ class VenueCard extends StatelessWidget {
                             BlendMode.multiply,
                           ),
                           child: Image.asset(
-                            'assets/images/listening-room.png',
+                            venue.imageAsset,
                             fit: BoxFit.cover,
                             alignment: Alignment(venue.imageAlignment, 0),
                           ),

@@ -17,6 +17,7 @@ class Venue {
     required this.mapX,
     required this.mapY,
     required this.imageAlignment,
+    required this.imageAsset,
   });
 
   final String id;
@@ -34,6 +35,7 @@ class Venue {
   final double mapX;
   final double mapY;
   final double imageAlignment;
+  final String imageAsset;
 
   String get typeLabel => switch (type) {
     VenueType.listeningBar => 'LISTENING BAR',

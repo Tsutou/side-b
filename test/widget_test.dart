@@ -33,7 +33,7 @@ void main() {
     expect(find.text('SIDE B'), findsOneWidget);
     expect(find.text('次の一軒を、\n地図から。'), findsOneWidget);
     expect(find.text('この地図にある7軒'), findsOneWidget);
-    expect(find.text('ROOM 33'), findsOneWidget);
+    expect(find.text('ROOM 33'), findsWidgets);
     expect(find.text('ガイド'), findsOneWidget);
     expect(find.text('地図'), findsOneWidget);
     expect(find.text('保存'), findsOneWidget);
@@ -75,6 +75,20 @@ void main() {
 
     expect(find.text('次の一軒を、\n地図から。'), findsOneWidget);
     expect(find.text('地図プレビュー / 架空の位置'), findsOneWidget);
+  });
+
+  testWidgets('selects a venue from the editorial map', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+    await tester.pumpAndSettle();
+
+    final marker = find.bySemanticsLabel('KISSA NAGI, 高円寺');
+    await tester.ensureVisible(marker);
+    await tester.tap(marker);
+    await tester.pumpAndSettle();
+
+    expect(find.text('KISSA NAGI'), findsNWidgets(2));
   });
 
   testWidgets('switches the interface to English', (tester) async {
