@@ -33,22 +33,22 @@ class _SideBShellState extends State<SideBShell> {
         child: IndexedStack(
           index: _index,
           children: [
-            DiscoverScreen(
-              savedVenues: widget.savedVenues,
-              locale: widget.locale,
-              onLocaleChanged: widget.onLocaleChanged,
-              onOpenMap: () => setState(() => _index = 1),
-            ),
             MapScreen(
               savedVenues: widget.savedVenues,
               locale: widget.locale,
               onLocaleChanged: widget.onLocaleChanged,
             ),
+            DiscoverScreen(
+              savedVenues: widget.savedVenues,
+              locale: widget.locale,
+              onLocaleChanged: widget.onLocaleChanged,
+              onOpenMap: () => setState(() => _index = 0),
+            ),
             SavedScreen(
               savedVenues: widget.savedVenues,
               locale: widget.locale,
               onLocaleChanged: widget.onLocaleChanged,
-              onBrowse: () => setState(() => _index = 0),
+              onBrowse: () => setState(() => _index = 1),
             ),
           ],
         ),
@@ -62,14 +62,14 @@ class _SideBShellState extends State<SideBShell> {
             onDestinationSelected: (index) => setState(() => _index = index),
             destinations: [
               NavigationDestination(
-                icon: const Icon(Icons.explore_outlined),
-                selectedIcon: const Icon(Icons.explore),
-                label: copy.t('discover'),
-              ),
-              NavigationDestination(
                 icon: const Icon(Icons.map_outlined),
                 selectedIcon: const Icon(Icons.map),
                 label: copy.t('map'),
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.explore_outlined),
+                selectedIcon: const Icon(Icons.explore),
+                label: copy.t('discover'),
               ),
               NavigationDestination(
                 icon: const Icon(Icons.bookmark_border),

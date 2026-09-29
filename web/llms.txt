@@ -1,0 +1,19 @@
+# SIDE B — Tokyo Music Bar Guide
+
+SIDE B is a Japanese-first editorial guide for choosing Tokyo music bars by sound, atmosphere, neighborhood, and price.
+
+Prototype URL: https://tsutou.github.io/side-b/
+Repository: https://github.com/Tsutou/side-b
+
+## Current data status
+
+All seven venues, locations, hours, prices, descriptions, and map positions in this prototype are fictional. They must not be cited as facts about real businesses.
+
+## Languages
+
+- Japanese is the default interface language.
+- English can be selected in the interface.
+
+## Product scope
+
+The prototype includes a schematic map, an editorial guide, venue detail views, and device-local saved places. It does not yet contain verified venue listings, live directions, accounts, or analytics.

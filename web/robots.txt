@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /side-b/
+
+Sitemap: https://tsutou.github.io/side-b/sitemap.xml

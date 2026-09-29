@@ -5,6 +5,7 @@ import 'package:side_b/core/design/tokens.dart';
 import 'package:side_b/core/localization/app_localizations.dart';
 import 'package:side_b/features/saved/application/saved_venues_controller.dart';
 import 'package:side_b/features/venues/data/mock_venues.dart';
+import 'package:side_b/features/venues/domain/venue.dart';
 import 'package:side_b/features/venues/presentation/venue_detail_screen.dart';
 import 'package:side_b/shared/widgets/brand_header.dart';
 
@@ -75,21 +76,37 @@ class MapScreen extends StatelessWidget {
                       aspectRatio: wide ? 1.15 : 1,
                       child: _MapPreview(savedVenues: savedVenues),
                     );
-                    if (wide) {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(flex: 4, child: intro),
-                          const SizedBox(width: SideBSpacing.xxl),
-                          Expanded(flex: 6, child: map),
-                        ],
-                      );
-                    }
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        intro,
-                        const SizedBox(height: SideBSpacing.xl),
-                        map,
+                        if (wide)
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(flex: 7, child: map),
+                              const SizedBox(width: SideBSpacing.xxl),
+                              Expanded(flex: 4, child: intro),
+                            ],
+                          )
+                        else ...[
+                          intro,
+                          const SizedBox(height: SideBSpacing.xl),
+                          map,
+                        ],
+                        const SizedBox(height: SideBSpacing.xxl),
+                        const Divider(thickness: SideBBorders.strong),
+                        const SizedBox(height: SideBSpacing.lg),
+                        Text(
+                          copy.t('mapIndexTitle'),
+                          style: Theme.of(context).textTheme.labelLarge
+                              ?.copyWith(color: SideBColors.vermilion),
+                        ),
+                        const SizedBox(height: SideBSpacing.md),
+                        _VenueIndex(
+                          savedVenues: savedVenues,
+                          columns: wide ? 2 : 1,
+                        ),
+                        const SizedBox(height: SideBSpacing.display),
                       ],
                     );
                   },
@@ -99,6 +116,123 @@ class MapScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _VenueIndex extends StatelessWidget {
+  const _VenueIndex({required this.savedVenues, required this.columns});
+
+  final SavedVenuesController savedVenues;
+  final int columns;
+
+  @override
+  Widget build(BuildContext context) {
+    final languageCode = AppLocalizations.of(context).locale.languageCode;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final itemWidth =
+            columns == 1
+                ? constraints.maxWidth
+                : (constraints.maxWidth - SideBSpacing.lg) / columns;
+        return Wrap(
+          spacing: SideBSpacing.lg,
+          runSpacing: SideBSpacing.xs,
+          children: [
+            for (final entry in mockVenues.asMap().entries)
+              SizedBox(
+                width: itemWidth,
+                child: _VenueIndexItem(
+                  number: entry.key + 1,
+                  venue: entry.value,
+                  languageCode: languageCode,
+                  savedVenues: savedVenues,
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _VenueIndexItem extends StatelessWidget {
+  const _VenueIndexItem({
+    required this.number,
+    required this.venue,
+    required this.languageCode,
+    required this.savedVenues,
+  });
+
+  final int number;
+  final Venue venue;
+  final String languageCode;
+  final SavedVenuesController savedVenues;
+
+  @override
+  Widget build(BuildContext context) {
+    void openVenue() {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder:
+              (_) => VenueDetailScreen(venue: venue, savedVenues: savedVenues),
+        ),
+      );
+    }
+
+    final label =
+        '$number. ${venue.name}, ${venue.areaFor(languageCode)}, ${venue.price}';
+    return Semantics(
+      button: true,
+      label: label,
+      onTap: openVenue,
+      child: ExcludeSemantics(
+        child: InkWell(
+          onTap: openVenue,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: SideBSizes.tapTarget),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: SideBSpacing.xs),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 34,
+                    child: Text(
+                      number.toString().padLeft(2, '0'),
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: SideBColors.vermilion,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          venue.name,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: SideBSpacing.xxs),
+                        Text(
+                          venue.areaFor(languageCode),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: SideBSpacing.sm),
+                  Text(
+                    venue.price,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(width: SideBSpacing.xs),
+                  const Icon(Icons.arrow_forward, size: 18),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -209,6 +343,8 @@ class _TokyoLinesPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.clipRect(Offset.zero & size);
     final street =
         Paint()
           ..color = SideBColors.warmGray.withValues(alpha: .28)
@@ -241,6 +377,7 @@ class _TokyoLinesPainter extends CustomPainter {
       path.lineTo(x, y);
     }
     canvas.drawPath(path, river);
+    canvas.restore();
   }
 
   @override

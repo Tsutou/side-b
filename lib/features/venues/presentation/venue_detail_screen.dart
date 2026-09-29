@@ -220,7 +220,7 @@ class _Fact extends StatelessWidget {
           label,
           style: Theme.of(
             context,
-          ).textTheme.labelLarge?.copyWith(color: SideBColors.warmGray),
+          ).textTheme.labelLarge?.copyWith(color: SideBColors.inkSoft),
         ),
         const SizedBox(height: SideBSpacing.xs),
         Text(

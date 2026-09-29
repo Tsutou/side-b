@@ -22,8 +22,8 @@ flutter test
 flutter build web
 ```
 
-Product scope and data policy are in [`docs/product.md`](docs/product.md). Visual direction and accessibility decisions are in [`docs/design.md`](docs/design.md).
+Product scope and data policy are in [`docs/product.md`](docs/product.md). Visual direction and accessibility decisions are in [`docs/design.md`](docs/design.md). The delivery review and release gates are in [`docs/engineering.md`](docs/engineering.md); MCP candidates and adoption rules are in [`docs/mcp.md`](docs/mcp.md).
 
 ## Repository skills
 
-Project-specific Codex skills live in [`.agents/skills/`](.agents/skills/). They cover natural Japanese and marketing copy, design-engineering polish, mobile web behavior, and restrained motion design/review. Product messaging context lives in [`.agents/product-marketing.md`](.agents/product-marketing.md); source attribution and licenses are documented in [`.agents/README.md`](.agents/README.md).
+Project-specific Codex skills live in [`.agents/skills/`](.agents/skills/). They cover natural Japanese and marketing copy, product delivery, technical SEO, accessibility, design-engineering polish, mobile web behavior, and restrained motion design/review. Product messaging context lives in [`.agents/product-marketing.md`](.agents/product-marketing.md); source attribution and licenses are documented in [`.agents/README.md`](.agents/README.md).

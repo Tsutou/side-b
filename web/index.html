@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -19,9 +19,25 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-  <meta name="description" content="Find your next Tokyo music bar by its sound, mood, neighborhood, and price.">
+  <meta name="description" content="選曲、店の空気、街、予算から、今夜の一軒を選ぶ。SIDE Bは、音を目当てに出かけたい東京のミュージックバーガイドです。">
+  <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="theme-color" content="#F3ECD9">
   <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://tsutou.github.io/side-b/">
+  <link rel="sitemap" type="application/xml" href="https://tsutou.github.io/side-b/sitemap.xml">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="SIDE B">
+  <meta property="og:title" content="SIDE B — 東京ミュージックバーガイド">
+  <meta property="og:description" content="選曲、店の空気、街、予算から、今夜の一軒を選ぶ。">
+  <meta property="og:url" content="https://tsutou.github.io/side-b/">
+  <meta property="og:image" content="https://tsutou.github.io/side-b/assets/assets/images/listening-bar-illustration.png">
+  <meta property="og:image:width" content="1536">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="架空の東京のリスニングバーを描いたオリジナルイラスト">
+  <meta name="twitter:card" content="summary_large_image">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -32,8 +48,20 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>SIDE B — Tokyo Music Bar Guide</title>
+  <title>SIDE B — 東京ミュージックバーガイド</title>
   <link rel="manifest" href="manifest.json">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SIDE B",
+    "alternateName": "Tokyo Music Bar Guide",
+    "url": "https://tsutou.github.io/side-b/",
+    "description": "選曲、店の空気、街、予算から、今夜の一軒を選ぶ東京ミュージックバーガイド。",
+    "inLanguage": ["ja", "en"],
+    "image": "https://tsutou.github.io/side-b/assets/assets/images/listening-bar-illustration.png"
+  }
+  </script>
   <style>
     html,
     body {
@@ -54,9 +82,73 @@
       -webkit-user-select: none;
       -webkit-touch-callout: none;
     }
+
+    .preflight {
+      min-height: 100%;
+      box-sizing: border-box;
+      display: grid;
+      place-items: center;
+      padding: max(32px, env(safe-area-inset-top)) 24px max(32px, env(safe-area-inset-bottom));
+      color: #191816;
+      font-family: "Noto Sans JP", system-ui, sans-serif;
+    }
+
+    .preflight__inner {
+      width: min(100%, 880px);
+      border-top: 2px solid #191816;
+      border-bottom: 2px solid #191816;
+      padding: 28px 0 32px;
+    }
+
+    .preflight__brand {
+      margin: 0 0 48px;
+      font-family: Futura, "Avenir Next", sans-serif;
+      font-size: clamp(40px, 8vw, 72px);
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      line-height: .9;
+    }
+
+    .preflight h1 {
+      max-width: 13em;
+      margin: 0;
+      font-size: clamp(36px, 7vw, 68px);
+      font-weight: 600;
+      letter-spacing: -.04em;
+      line-height: 1.08;
+    }
+
+    .preflight p {
+      max-width: 40em;
+      margin: 24px 0 0;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .preflight__note {
+      color: #6D2D24;
+      font-size: 13px !important;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
+  <main id="preflight-content" class="preflight">
+    <div class="preflight__inner">
+      <p class="preflight__brand">SIDE B</p>
+      <h1>次の一軒を、地図から。</h1>
+      <p>選曲、店の空気、街、予算を見比べて、音を目当てに出かけたくなる東京のミュージックバーを探せます。</p>
+      <p class="preflight__note">プロトタイプ号 — 掲載店と情報はすべて架空です</p>
+    </div>
+  </main>
+  <noscript>
+    <p>このガイドを見るにはJavaScriptを有効にしてください。</p>
+  </noscript>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      document.getElementById('preflight-content')?.remove();
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

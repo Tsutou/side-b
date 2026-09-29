@@ -8,6 +8,11 @@ import 'package:side_b/features/venues/data/mock_venues.dart';
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
+  Future<void> openJapaneseGuide(WidgetTester tester) async {
+    await tester.tap(find.text('ガイド'));
+    await tester.pumpAndSettle();
+  }
+
   test('provides Japanese and English venue copy', () {
     final venue = mockVenues.first;
 
@@ -20,18 +25,15 @@ void main() {
     );
   });
 
-  testWidgets('shows the editorial discover shell and mock-data notice', (
-    tester,
-  ) async {
+  testWidgets('opens on the map-first shell', (tester) async {
     final saved = SavedVenuesController();
     await tester.pumpWidget(SideBApp(savedVenues: saved));
     await tester.pumpAndSettle();
 
     expect(find.text('SIDE B'), findsOneWidget);
-    expect(find.text('今夜、音を聴きに\nどこへ行く？'), findsOneWidget);
-    final title = tester.widget<Text>(find.text('今夜、音を聴きに\nどこへ行く？'));
-    expect(title.style?.fontFamily, 'NotoSansJP');
-    expect(find.textContaining('プロトタイプ号'), findsOneWidget);
+    expect(find.text('次の一軒を、\n地図から。'), findsOneWidget);
+    expect(find.text('この地図にある7軒'), findsOneWidget);
+    expect(find.text('ROOM 33'), findsOneWidget);
     expect(find.text('ガイド'), findsOneWidget);
     expect(find.text('地図'), findsOneWidget);
     expect(find.text('保存'), findsOneWidget);
@@ -46,6 +48,7 @@ void main() {
     final saved = SavedVenuesController();
     await tester.pumpWidget(SideBApp(savedVenues: saved));
     await tester.pumpAndSettle();
+    await openJapaneseGuide(tester);
 
     final saveControl = find.byKey(const ValueKey('save-room-33')).first;
     await tester.ensureVisible(saveControl);
@@ -62,6 +65,7 @@ void main() {
   testWidgets('opens the map from the primary hero action', (tester) async {
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
+    await openJapaneseGuide(tester);
 
     final mapAction = find.text('地図から7軒を見る');
     await tester.ensureVisible(mapAction);
@@ -80,6 +84,9 @@ void main() {
     await tester.tap(find.text('EN').first);
     await tester.pumpAndSettle();
 
+    expect(find.text('Choose your next room\nfrom the map.'), findsOneWidget);
+    await tester.tap(find.text('Discover'));
+    await tester.pumpAndSettle();
     expect(find.text('Where will you\nlisten tonight?'), findsOneWidget);
     expect(find.text('Map'), findsOneWidget);
     expect(find.textContaining('JINBŌCHŌ'), findsWidgets);
@@ -102,7 +109,7 @@ void main() {
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
 
-    expect(find.text('Where will you\nlisten tonight?'), findsOneWidget);
+    expect(find.text('Choose your next room\nfrom the map.'), findsOneWidget);
     expect(find.text('EN'), findsWidgets);
   });
 
@@ -111,6 +118,7 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
+    await openJapaneseGuide(tester);
 
     final title = tester.widget<Text>(find.text('今夜、音を聴きに\nどこへ行く？'));
 
@@ -126,8 +134,27 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
+    await openJapaneseGuide(tester);
 
     expect(find.text('今夜、音を聴きに\nどこへ行く？'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('meets automated accessibility guidelines on the map', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    try {
+      await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+      await tester.pumpAndSettle();
+
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+    } finally {
+      semantics.dispose();
+    }
   });
 }

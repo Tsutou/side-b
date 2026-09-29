@@ -42,6 +42,7 @@ class AppLocalizations {
       'mapBody':
           'See how the seven fictional venues in this prototype sit across Tokyo. Verified maps and directions will come with real venue data.',
       'mapComing': 'MAP PREVIEW / FICTIONAL LOCATIONS',
+      'mapIndexTitle': '7 ROOMS ON THIS MAP',
       'venueDataNote':
           'This venue and every detail on this page are fictional prototype data. They do not describe a real business.',
       'sideBNote': 'WHY SIDE B PICKED IT',
@@ -83,6 +84,7 @@ class AppLocalizations {
       'mapTitle': '次の一軒を、\n地図から。',
       'mapBody': '掲載した7軒の位置関係を眺めるためのプレビューです。実在する店を掲載する段階で、正確な地図と経路案内を加えます。',
       'mapComing': '地図プレビュー / 架空の位置',
+      'mapIndexTitle': 'この地図にある7軒',
       'venueDataNote': '掲載内容はプロトタイプ用の架空データです。実在する店舗についての記述ではありません。',
       'sideBNote': 'この店を選んだ理由',
       'hours': '営業時間',

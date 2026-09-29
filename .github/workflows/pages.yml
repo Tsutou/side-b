@@ -29,11 +29,25 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: Analyze source
+        run: flutter analyze
+
       - name: Run tests
         run: flutter test
 
       - name: Build web app
         run: flutter build web --release --base-href "/side-b/"
+
+      - name: Verify web discovery files
+        run: |
+          test -f build/web/robots.txt
+          test -f build/web/sitemap.xml
+          test -f build/web/llms.txt
+          grep -F 'https://tsutou.github.io/side-b/' build/web/index.html
+          grep -F 'application/ld+json' build/web/index.html
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
