@@ -189,32 +189,33 @@ class VenueDetailScreen extends StatelessWidget {
                             minimumSize: const Size.fromHeight(
                               SideBSizes.tapTarget,
                             ),
-                            backgroundColor: SideBColors.midnight,
-                            foregroundColor: SideBColors.ivory,
-                            textStyle: Theme.of(context).textTheme.labelLarge,
                           ),
                         ),
                         const SizedBox(height: SideBSpacing.xxl),
-                        Container(
-                          color: SideBColors.ink,
-                          padding: const EdgeInsets.all(SideBSpacing.lg),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.info_outline,
-                                color: SideBColors.vermilion,
-                                size: 22,
-                              ),
-                              const SizedBox(width: SideBSpacing.sm),
-                              Expanded(
-                                child: Text(
-                                  copy.t('venueDataNote'),
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                      ?.copyWith(color: SideBColors.ivory),
+                        Card(
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          child: Padding(
+                            padding: const EdgeInsets.all(SideBSpacing.lg),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.info_outline,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  size: 22,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: SideBSpacing.sm),
+                                Expanded(
+                                  child: Text(
+                                    copy.t('venueDataNote'),
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -264,13 +265,5 @@ class _Signal extends StatelessWidget {
   final String label;
 
   @override
-  Widget build(BuildContext context) => Chip(
-    label: Text(label),
-    backgroundColor: Colors.transparent,
-    side: const BorderSide(color: SideBColors.ink),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(SideBRadii.small),
-    ),
-    labelStyle: Theme.of(context).textTheme.labelLarge,
-  );
+  Widget build(BuildContext context) => Chip(label: Text(label));
 }

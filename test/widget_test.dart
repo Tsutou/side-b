@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:side_b/app/side_b_app.dart';
+import 'package:side_b/core/design/tokens.dart';
 import 'package:side_b/features/saved/application/saved_venues_controller.dart';
 import 'package:side_b/features/venues/data/mock_venues.dart';
 
@@ -46,6 +47,14 @@ void main() {
     expect(find.byType(SegmentedButton<String>), findsOneWidget);
     final context = tester.element(find.byType(Scaffold).first);
     expect(Theme.of(context).useMaterial3, isTrue);
+    expect(Theme.of(context).colorScheme.tertiary, SideBColors.albumYellow);
+    expect(Theme.of(context).chipTheme.showCheckmark, isTrue);
+    final dialogShape =
+        Theme.of(context).dialogTheme.shape! as RoundedRectangleBorder;
+    expect(
+      (dialogShape.borderRadius as BorderRadius).topLeft.x,
+      SideBRadii.extraLarge,
+    );
   });
 
   testWidgets('saves a venue and shows it in Saved', (tester) async {
@@ -228,6 +237,20 @@ void main() {
     await openJapaneseGuide(tester);
 
     expect(find.text('今夜、音を聴きに\nどこへ行く？'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('reflows the Material 3 map controls at 320 logical pixels', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(320, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('徒歩20分圏内'), findsOneWidget);
+    expect(find.text('現在地から'), findsOneWidget);
+    expect(find.text('場所を指定'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

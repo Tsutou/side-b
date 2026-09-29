@@ -29,6 +29,8 @@ abstract final class SideBSpacing {
 abstract final class SideBRadii {
   static const small = 2.0;
   static const medium = 8.0;
+  static const large = 16.0;
+  static const extraLarge = 28.0;
   static const round = 999.0;
 }
 

@@ -242,15 +242,11 @@ class _WalkingScopePanel extends StatelessWidget {
     return Semantics(
       container: true,
       label: copy.t('walkingRangeLabel'),
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: SideBColors.midnight,
-          border: Border(
-            left: BorderSide(
-              color: SideBColors.albumYellow,
-              width: SideBBorders.strong * 2,
-            ),
-          ),
+      child: Card(
+        color: SideBColors.midnight,
+        surfaceTintColor: SideBColors.vermilion,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(SideBRadii.large),
         ),
         child: Padding(
           padding: const EdgeInsets.all(SideBSpacing.lg),
@@ -260,10 +256,18 @@ class _WalkingScopePanel extends StatelessWidget {
               final heading = Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.directions_walk,
-                    color: SideBColors.albumYellow,
-                    size: 30,
+                  Container(
+                    width: SideBSizes.tapTarget,
+                    height: SideBSizes.tapTarget,
+                    decoration: const BoxDecoration(
+                      color: SideBColors.albumYellow,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.directions_walk,
+                      color: SideBColors.ink,
+                      size: 26,
+                    ),
                   ),
                   const SizedBox(width: SideBSpacing.sm),
                   Expanded(
@@ -298,6 +302,9 @@ class _WalkingScopePanel extends StatelessWidget {
                     style: FilledButton.styleFrom(
                       backgroundColor: SideBColors.albumYellow,
                       foregroundColor: SideBColors.ink,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SideBSpacing.md,
+                      ),
                     ),
                   ),
                   OutlinedButton.icon(
@@ -307,7 +314,13 @@ class _WalkingScopePanel extends StatelessWidget {
                     label: Text(copy.t('walkingChoose')),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: SideBColors.white,
-                      side: const BorderSide(color: SideBColors.ivory),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: SideBSpacing.md,
+                      ),
+                      side: const BorderSide(
+                        color: SideBColors.ivory,
+                        width: SideBBorders.strong,
+                      ),
                     ),
                   ),
                 ],
@@ -520,17 +533,12 @@ class _FilterBubble extends StatelessWidget {
   Widget build(BuildContext context) => FilterChip(
     selected: selected,
     onSelected: onSelected,
-    showCheckmark: false,
-    selectedColor: SideBColors.albumYellow,
-    backgroundColor: SideBColors.paper,
     side: BorderSide(
-      color: selected ? SideBColors.ink : SideBColors.line,
+      color:
+          selected
+              ? Theme.of(context).colorScheme.onTertiaryContainer
+              : Theme.of(context).colorScheme.outlineVariant,
       width: selected ? 2 : 1,
-    ),
-    shape: const StadiumBorder(),
-    padding: const EdgeInsets.symmetric(
-      horizontal: SideBSpacing.xs,
-      vertical: SideBSpacing.xxs,
     ),
     label: Row(
       mainAxisSize: MainAxisSize.min,
@@ -555,7 +563,6 @@ class _FilterBubble extends StatelessWidget {
         ),
       ],
     ),
-    labelStyle: Theme.of(context).textTheme.labelLarge,
   );
 }
 
@@ -745,18 +752,19 @@ class _MapPreview extends StatelessWidget {
   final ValueChanged<int> onSelected;
 
   @override
-  Widget build(BuildContext context) => Container(
-    color: SideBColors.ink,
-    child: LayoutBuilder(
-      builder: (context, constraints) {
-        final compact = constraints.maxWidth < 620;
-        final copy = AppLocalizations.of(context);
-        final languageCode = copy.locale.languageCode;
-        final markerHeight = constraints.maxHeight - (compact ? 174 : 0);
-        final selectedVenue =
-            visibleIndices.isEmpty ? null : mockVenues[selectedIndex];
-        return ClipRect(
-          child: Stack(
+  Widget build(BuildContext context) => ClipRRect(
+    borderRadius: BorderRadius.circular(SideBRadii.large),
+    child: ColoredBox(
+      color: SideBColors.ink,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final compact = constraints.maxWidth < 620;
+          final copy = AppLocalizations.of(context);
+          final languageCode = copy.locale.languageCode;
+          final markerHeight = constraints.maxHeight - (compact ? 174 : 0);
+          final selectedVenue =
+              visibleIndices.isEmpty ? null : mockVenues[selectedIndex];
+          return Stack(
             children: [
               const Positioned.fill(
                 child: CustomPaint(painter: _TokyoLinesPainter()),
@@ -882,9 +890,9 @@ class _MapPreview extends StatelessWidget {
                   ),
                 ),
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     ),
   );
 }

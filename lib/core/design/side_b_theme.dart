@@ -16,11 +16,21 @@ abstract final class SideBTheme {
       onSecondary: SideBColors.white,
       secondaryContainer: const Color(0xFFDDE1EA),
       onSecondaryContainer: SideBColors.ink,
+      tertiary: SideBColors.albumYellow,
+      onTertiary: SideBColors.ink,
+      tertiaryContainer: const Color(0xFFF6E3A6),
+      onTertiaryContainer: SideBColors.ink,
       surface: SideBColors.ivory,
       onSurface: SideBColors.ink,
+      onSurfaceVariant: SideBColors.inkSoft,
+      surfaceContainerLowest: SideBColors.paper,
+      surfaceContainerLow: const Color(0xFFFAF4E5),
       surfaceContainer: SideBColors.paper,
+      surfaceContainerHigh: const Color(0xFFEDE4D3),
+      surfaceContainerHighest: const Color(0xFFE2D7C4),
       outline: SideBColors.line,
       outlineVariant: const Color(0xFFD8D0C5),
+      surfaceTint: SideBColors.vermilion,
     );
     final base = ThemeData(
       useMaterial3: true,
@@ -86,8 +96,41 @@ abstract final class SideBTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: SideBColors.ink,
         foregroundColor: SideBColors.ivory,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: SideBColors.vermilion,
         centerTitle: false,
+      ),
+      cardTheme: CardThemeData(
+        color: colorScheme.surfaceContainerLow,
+        surfaceTintColor: colorScheme.surfaceTint,
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(SideBRadii.large),
+          side: BorderSide(color: colorScheme.outlineVariant),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: colorScheme.surfaceContainerHigh,
+        surfaceTintColor: colorScheme.surfaceTint,
+        elevation: 6,
+        iconColor: colorScheme.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(SideBRadii.extraLarge),
+        ),
+        titleTextStyle: base.textTheme.headlineSmall?.copyWith(
+          color: colorScheme.onSurface,
+          fontWeight: FontWeight.w600,
+        ),
+        contentTextStyle: base.textTheme.bodyLarge?.copyWith(
+          color: colorScheme.onSurfaceVariant,
+        ),
+        actionsPadding: const EdgeInsets.fromLTRB(
+          SideBSpacing.lg,
+          0,
+          SideBSpacing.lg,
+          SideBSpacing.md,
+        ),
       ),
       navigationBarTheme: NavigationBarThemeData(
         height: SideBSizes.bottomNavHeight,
@@ -122,21 +165,21 @@ abstract final class SideBTheme {
           foregroundColor: WidgetStateProperty.resolveWith(
             (states) =>
                 states.contains(WidgetState.selected)
-                    ? SideBColors.ivory
+                    ? colorScheme.onPrimaryContainer
                     : SideBColors.inkSoft,
           ),
           backgroundColor: WidgetStateProperty.resolveWith(
             (states) =>
                 states.contains(WidgetState.selected)
-                    ? SideBColors.vermilion
-                    : Colors.transparent,
+                    ? colorScheme.primaryContainer
+                    : colorScheme.surfaceContainerLow,
           ),
-          side: const WidgetStatePropertyAll(
-            BorderSide(color: SideBColors.line),
+          side: WidgetStatePropertyAll(
+            BorderSide(color: colorScheme.outlineVariant),
           ),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(SideBRadii.medium),
+              borderRadius: BorderRadius.circular(SideBRadii.large),
             ),
           ),
           textStyle: WidgetStatePropertyAll(base.textTheme.labelLarge),
@@ -147,6 +190,91 @@ abstract final class SideBTheme {
           minimumSize: WidgetStatePropertyAll(
             Size(SideBSizes.tapTarget, SideBSizes.tapTarget),
           ),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(
+            Size(0, SideBSizes.tapTarget),
+          ),
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(
+              horizontal: SideBSpacing.lg,
+              vertical: SideBSpacing.sm,
+            ),
+          ),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(SideBRadii.large),
+            ),
+          ),
+          textStyle: WidgetStatePropertyAll(base.textTheme.labelLarge),
+          animationDuration: SideBMotion.quick,
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(
+            Size(0, SideBSizes.tapTarget),
+          ),
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(
+              horizontal: SideBSpacing.lg,
+              vertical: SideBSpacing.sm,
+            ),
+          ),
+          side: WidgetStatePropertyAll(BorderSide(color: colorScheme.outline)),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(SideBRadii.large),
+            ),
+          ),
+          textStyle: WidgetStatePropertyAll(base.textTheme.labelLarge),
+          animationDuration: SideBMotion.quick,
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(
+            Size(SideBSizes.tapTarget, SideBSizes.tapTarget),
+          ),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(SideBRadii.large),
+            ),
+          ),
+          textStyle: WidgetStatePropertyAll(base.textTheme.labelLarge),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: colorScheme.surfaceContainerLow,
+        selectedColor: colorScheme.tertiaryContainer,
+        checkmarkColor: colorScheme.onTertiaryContainer,
+        showCheckmark: true,
+        side: BorderSide(color: colorScheme.outlineVariant),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(SideBRadii.large),
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SideBSpacing.xs,
+          vertical: SideBSpacing.xxs,
+        ),
+        labelStyle: base.textTheme.labelLarge?.copyWith(
+          color: colorScheme.onSurface,
+        ),
+        secondaryLabelStyle: base.textTheme.labelLarge?.copyWith(
+          color: colorScheme.onTertiaryContainer,
+        ),
+        pressElevation: 0,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: colorScheme.inverseSurface,
+        contentTextStyle: base.textTheme.bodyMedium?.copyWith(
+          color: colorScheme.onInverseSurface,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(SideBRadii.medium),
         ),
       ),
       focusColor: SideBColors.vermilion.withValues(alpha: .15),

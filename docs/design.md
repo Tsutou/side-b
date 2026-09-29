@@ -20,11 +20,11 @@ The map is the primary editorial surface: a full-width, jacket-like night map pa
 
 English typography uses Futura across display, body, labels, and brand elements. Japanese uses the bundled Noto Sans JP variable font while preserving the same hierarchy; the `SIDE B` wordmark remains Futura in both locales. Noto Sans JP is distributed under the SIL Open Font License, stored alongside the font asset. Futura is referenced as a locally installed family in the prototype; a licensed webfont asset is required before relying on it in production.
 
-Spacing follows a 4/8/12/16/24/32/48/72 scale. Corners stay nearly square. Shadows are reserved for genuinely floating surfaces. Motion uses 140 ms and 240 ms durations, and the MVP avoids required animation so reduced-motion users lose no context.
+Spacing follows a 4/8/12/16/24/32/48/72 scale. Editorial image and rule compositions can stay square; interactive surfaces use the Material 3 shape scale (8, 16, and 28px) so controls, cards, and dialogs expose a consistent hierarchy. Shadows are reserved for genuinely floating surfaces. Motion uses 140 ms and 240 ms durations, and the MVP avoids required animation so reduced-motion users lose no context.
 
 ## Material Design foundation
 
-Material 3 is the interaction and component foundation. Navigation uses `NavigationBar`, language selection uses `SegmentedButton`, venue signals use `Chip`, and actions use Material button variants with their standard focus, hover, pressed, selected, disabled, tooltip, and semantic behavior. The color scheme maps SIDE B's ink, ivory, vermilion, and moss palette onto Material color roles. Editorial composition, photography, and typography carry the publication identity without replacing familiar platform behavior.
+Material 3 is the interaction and component foundation. Navigation uses `NavigationBar`, language selection uses `SegmentedButton`, venue signals use `Chip`, and actions use Material button variants with their standard focus, hover, pressed, selected, disabled, tooltip, and semantic behavior. The color scheme maps SIDE B's ink, ivory, vermilion, midnight, and album yellow onto primary, secondary, tertiary, and surface-container roles. Component themes own shape, padding, state, and tonal emphasis so editorial screens do not invent a separate interaction language. Editorial composition, photography, and typography carry the publication identity without replacing familiar platform behavior.
 
 ## Components in the MVP
 
