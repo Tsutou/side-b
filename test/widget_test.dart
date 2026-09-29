@@ -23,6 +23,10 @@ void main() {
       venue.editorialNoteFor('en'),
       'A narrow room where the second side gets played in full.',
     );
+    final mapsUri = venue.googleMapsAreaUri('ja');
+    expect(mapsUri.host, 'www.google.com');
+    expect(mapsUri.queryParameters['api'], '1');
+    expect(mapsUri.queryParameters['query'], '神保町 東京 ミュージックバー');
   });
 
   testWidgets('opens on the map-first shell', (tester) async {
@@ -89,6 +93,35 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('KISSA NAGI'), findsNWidgets(2));
+  });
+
+  testWidgets('filters the map with mood bubbles', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('filter-dj')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('METER'), findsNWidgets(2));
+    expect(find.text('ROOM 33'), findsNothing);
+    expect(find.text('01 / 07'), findsOneWidget);
+  });
+
+  testWidgets('shows the Google Maps area action on venue details', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 1800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+    await tester.pumpAndSettle();
+
+    final venueIndex = find.text('ROOM 33').last;
+    await tester.tap(venueIndex);
+    await tester.pumpAndSettle();
+
+    expect(find.text('このエリアをGoogle Mapsで見る'), findsOneWidget);
   });
 
   testWidgets('switches the interface to English', (tester) async {

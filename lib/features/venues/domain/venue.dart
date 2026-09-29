@@ -63,4 +63,12 @@ class Venue {
 
   List<String> signalsFor(String languageCode) =>
       languageCode == 'ja' ? signalsJa : signals;
+
+  Uri googleMapsAreaUri(String languageCode) =>
+      Uri.https('www.google.com', '/maps/search/', {
+        'api': '1',
+        'query': '${areaFor(languageCode)} 東京 ミュージックバー',
+        'utm_source': 'side_b',
+        'utm_campaign': 'area_search',
+      });
 }

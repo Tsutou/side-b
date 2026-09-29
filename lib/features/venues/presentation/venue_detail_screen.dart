@@ -4,6 +4,7 @@ import 'package:side_b/core/localization/app_localizations.dart';
 import 'package:side_b/features/saved/application/saved_venues_controller.dart';
 import 'package:side_b/features/venues/domain/venue.dart';
 import 'package:side_b/shared/widgets/save_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VenueDetailScreen extends StatelessWidget {
   const VenueDetailScreen({
@@ -168,6 +169,30 @@ class VenueDetailScreen extends StatelessWidget {
                                   .signalsFor(languageCode)
                                   .map((signal) => _Signal(label: signal))
                                   .toList(),
+                        ),
+                        const SizedBox(height: SideBSpacing.xl),
+                        FilledButton.icon(
+                          onPressed: () async {
+                            final opened = await launchUrl(
+                              venue.googleMapsAreaUri(languageCode),
+                              mode: LaunchMode.externalApplication,
+                            );
+                            if (!opened && context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(copy.t('mapsArea'))),
+                              );
+                            }
+                          },
+                          icon: const Icon(Icons.map_outlined),
+                          label: Text(copy.t('mapsArea')),
+                          style: FilledButton.styleFrom(
+                            minimumSize: const Size.fromHeight(
+                              SideBSizes.tapTarget,
+                            ),
+                            backgroundColor: SideBColors.midnight,
+                            foregroundColor: SideBColors.ivory,
+                            textStyle: Theme.of(context).textTheme.labelLarge,
+                          ),
                         ),
                         const SizedBox(height: SideBSpacing.xxl),
                         Container(

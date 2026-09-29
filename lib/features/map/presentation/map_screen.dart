@@ -9,6 +9,8 @@ import 'package:side_b/features/venues/domain/venue.dart';
 import 'package:side_b/features/venues/presentation/venue_detail_screen.dart';
 import 'package:side_b/shared/widgets/brand_header.dart';
 
+enum _VenueFilter { quiet, solo, late, vinyl, dj }
+
 class MapScreen extends StatefulWidget {
   const MapScreen({
     required this.savedVenues,
@@ -27,10 +29,48 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   int _selectedIndex = 0;
+  final Set<_VenueFilter> _activeFilters = {};
+
+  bool _matchesFilter(Venue venue, _VenueFilter filter) => switch (filter) {
+    _VenueFilter.quiet => venue.signals.any(
+      (signal) => signal.contains('QUIET'),
+    ),
+    _VenueFilter.solo => venue.signals.contains('SOLO FRIENDLY'),
+    _VenueFilter.late => venue.signals.contains('LATE NIGHT'),
+    _VenueFilter.vinyl => venue.signals.contains('VINYL'),
+    _VenueFilter.dj =>
+      venue.type == VenueType.djBar || venue.signals.contains('DJ TONIGHT'),
+  };
+
+  List<int> get _visibleIndices {
+    if (_activeFilters.isEmpty) {
+      return List<int>.generate(mockVenues.length, (index) => index);
+    }
+    return [
+      for (final entry in mockVenues.asMap().entries)
+        if (_activeFilters.any((filter) => _matchesFilter(entry.value, filter)))
+          entry.key,
+    ];
+  }
+
+  void _toggleFilter(_VenueFilter? filter) {
+    setState(() {
+      if (filter == null) {
+        _activeFilters.clear();
+      } else if (!_activeFilters.add(filter)) {
+        _activeFilters.remove(filter);
+      }
+      final visible = _visibleIndices;
+      if (!visible.contains(_selectedIndex)) {
+        _selectedIndex = visible.first;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final copy = AppLocalizations.of(context);
+    final visibleIndices = _visibleIndices;
     return CustomScrollView(
       key: const PageStorageKey('map'),
       slivers: [
@@ -67,7 +107,20 @@ class _MapScreenState extends State<MapScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         _MapIntroduction(copy: copy, wide: wide),
-                        const SizedBox(height: SideBSpacing.xl),
+                        const SizedBox(height: SideBSpacing.lg),
+                        _FilterBubbles(
+                          activeFilters: _activeFilters,
+                          onToggle: _toggleFilter,
+                          countFor:
+                              (filter) =>
+                                  mockVenues
+                                      .where(
+                                        (venue) =>
+                                            _matchesFilter(venue, filter),
+                                      )
+                                      .length,
+                        ),
+                        const SizedBox(height: SideBSpacing.lg),
                         SizedBox(
                           height:
                               wide
@@ -76,6 +129,7 @@ class _MapScreenState extends State<MapScreen> {
                           child: _MapPreview(
                             savedVenues: widget.savedVenues,
                             selectedIndex: _selectedIndex,
+                            visibleIndices: visibleIndices,
                             onSelected:
                                 (index) =>
                                     setState(() => _selectedIndex = index),
@@ -92,7 +146,7 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                             ),
                             Text(
-                              '01—07',
+                              '${visibleIndices.length.toString().padLeft(2, '0')} / 07',
                               style: Theme.of(context).textTheme.labelLarge
                                   ?.copyWith(color: SideBColors.vermilion),
                             ),
@@ -105,6 +159,7 @@ class _MapScreenState extends State<MapScreen> {
                           savedVenues: widget.savedVenues,
                           columns: wide ? 2 : 1,
                           selectedIndex: _selectedIndex,
+                          visibleIndices: visibleIndices,
                           onSelected:
                               (index) => setState(() => _selectedIndex = index),
                         ),
@@ -185,17 +240,138 @@ class _IssueLine extends StatelessWidget {
   );
 }
 
+class _FilterBubbles extends StatelessWidget {
+  const _FilterBubbles({
+    required this.activeFilters,
+    required this.onToggle,
+    required this.countFor,
+  });
+
+  final Set<_VenueFilter> activeFilters;
+  final ValueChanged<_VenueFilter?> onToggle;
+  final int Function(_VenueFilter filter) countFor;
+
+  String _label(AppLocalizations copy, _VenueFilter filter) => switch (filter) {
+    _VenueFilter.quiet => copy.t('filterQuiet'),
+    _VenueFilter.solo => copy.t('filterSolo'),
+    _VenueFilter.late => copy.t('filterLate'),
+    _VenueFilter.vinyl => copy.t('filterVinyl'),
+    _VenueFilter.dj => copy.t('filterDj'),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final copy = AppLocalizations.of(context);
+    return Semantics(
+      container: true,
+      label: copy.t('filterLabel'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            copy.t('filterLabel'),
+            style: Theme.of(
+              context,
+            ).textTheme.labelLarge?.copyWith(color: SideBColors.vermilion),
+          ),
+          const SizedBox(height: SideBSpacing.sm),
+          Wrap(
+            spacing: SideBSpacing.xs,
+            runSpacing: SideBSpacing.xs,
+            children: [
+              _FilterBubble(
+                key: const ValueKey('filter-all'),
+                label: copy.t('filterAll'),
+                count: mockVenues.length,
+                selected: activeFilters.isEmpty,
+                onSelected: (_) => onToggle(null),
+              ),
+              for (final filter in _VenueFilter.values)
+                _FilterBubble(
+                  key: ValueKey('filter-${filter.name}'),
+                  label: _label(copy, filter),
+                  count: countFor(filter),
+                  selected: activeFilters.contains(filter),
+                  onSelected: (_) => onToggle(filter),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FilterBubble extends StatelessWidget {
+  const _FilterBubble({
+    required this.label,
+    required this.count,
+    required this.selected,
+    required this.onSelected,
+    super.key,
+  });
+
+  final String label;
+  final int count;
+  final bool selected;
+  final ValueChanged<bool> onSelected;
+
+  @override
+  Widget build(BuildContext context) => FilterChip(
+    selected: selected,
+    onSelected: onSelected,
+    showCheckmark: false,
+    selectedColor: SideBColors.albumYellow,
+    backgroundColor: SideBColors.paper,
+    side: BorderSide(
+      color: selected ? SideBColors.ink : SideBColors.line,
+      width: selected ? 2 : 1,
+    ),
+    shape: const StadiumBorder(),
+    padding: const EdgeInsets.symmetric(
+      horizontal: SideBSpacing.xs,
+      vertical: SideBSpacing.xxs,
+    ),
+    label: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(label),
+        const SizedBox(width: SideBSpacing.xs),
+        Container(
+          width: 24,
+          height: 24,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: selected ? SideBColors.ink : SideBColors.ivory,
+          ),
+          child: Text(
+            '$count',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: selected ? SideBColors.ivory : SideBColors.ink,
+              letterSpacing: 0,
+            ),
+          ),
+        ),
+      ],
+    ),
+    labelStyle: Theme.of(context).textTheme.labelLarge,
+  );
+}
+
 class _VenueIndex extends StatelessWidget {
   const _VenueIndex({
     required this.savedVenues,
     required this.columns,
     required this.selectedIndex,
+    required this.visibleIndices,
     required this.onSelected,
   });
 
   final SavedVenuesController savedVenues;
   final int columns;
   final int selectedIndex;
+  final List<int> visibleIndices;
   final ValueChanged<int> onSelected;
 
   @override
@@ -211,16 +387,16 @@ class _VenueIndex extends StatelessWidget {
           spacing: SideBSpacing.lg,
           runSpacing: SideBSpacing.xs,
           children: [
-            for (final entry in mockVenues.asMap().entries)
+            for (final index in visibleIndices)
               SizedBox(
                 width: itemWidth,
                 child: _VenueIndexItem(
-                  number: entry.key + 1,
-                  venue: entry.value,
+                  number: index + 1,
+                  venue: mockVenues[index],
                   languageCode: languageCode,
                   savedVenues: savedVenues,
-                  selected: entry.key == selectedIndex,
-                  onSelected: () => onSelected(entry.key),
+                  selected: index == selectedIndex,
+                  onSelected: () => onSelected(index),
                 ),
               ),
           ],
@@ -350,11 +526,13 @@ class _MapPreview extends StatelessWidget {
   const _MapPreview({
     required this.savedVenues,
     required this.selectedIndex,
+    required this.visibleIndices,
     required this.onSelected,
   });
 
   final SavedVenuesController savedVenues;
   final int selectedIndex;
+  final List<int> visibleIndices;
   final ValueChanged<int> onSelected;
 
   @override
@@ -373,9 +551,9 @@ class _MapPreview extends StatelessWidget {
                 child: CustomPaint(painter: _TokyoLinesPainter()),
               ),
               const _DistrictLabels(),
-              ...mockVenues.asMap().entries.map((entry) {
-                final venue = entry.value;
-                final isSelected = entry.key == selectedIndex;
+              ...visibleIndices.map((index) {
+                final venue = mockVenues[index];
+                final isSelected = index == selectedIndex;
                 final semanticsLabel =
                     '${venue.name}, ${venue.areaFor(languageCode)}';
                 return Positioned(
@@ -387,12 +565,12 @@ class _MapPreview extends StatelessWidget {
                       button: true,
                       selected: isSelected,
                       label: semanticsLabel,
-                      onTap: () => onSelected(entry.key),
+                      onTap: () => onSelected(index),
                       child: ExcludeSemantics(
                         child: Tooltip(
                           message: semanticsLabel,
                           child: InkWell(
-                            onTap: () => onSelected(entry.key),
+                            onTap: () => onSelected(index),
                             borderRadius: BorderRadius.circular(
                               SideBRadii.round,
                             ),
@@ -428,7 +606,7 @@ class _MapPreview extends StatelessWidget {
                                   ),
                                   alignment: Alignment.center,
                                   child: Text(
-                                    '${entry.key + 1}',
+                                    '${index + 1}',
                                     style: Theme.of(
                                       context,
                                     ).textTheme.labelLarge?.copyWith(
@@ -451,7 +629,10 @@ class _MapPreview extends StatelessWidget {
               Positioned(
                 left: SideBSpacing.md,
                 top: SideBSpacing.md,
-                child: _MapPlate(selectedIndex: selectedIndex),
+                child: _MapPlate(
+                  selectedIndex: selectedIndex,
+                  visibleCount: visibleIndices.length,
+                ),
               ),
               Positioned(
                 left: compact ? 0 : null,
@@ -483,9 +664,10 @@ class _MapPreview extends StatelessWidget {
 }
 
 class _MapPlate extends StatelessWidget {
-  const _MapPlate({required this.selectedIndex});
+  const _MapPlate({required this.selectedIndex, required this.visibleCount});
 
   final int selectedIndex;
+  final int visibleCount;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -495,7 +677,7 @@ class _MapPlate extends StatelessWidget {
       vertical: SideBSpacing.xs,
     ),
     child: Text(
-      'TOKYO / ${(selectedIndex + 1).toString().padLeft(2, '0')} OF 07',
+      'TOKYO / ${(selectedIndex + 1).toString().padLeft(2, '0')} / $visibleCount SHOWN',
       style: Theme.of(context).textTheme.labelLarge,
     ),
   );
