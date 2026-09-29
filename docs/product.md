@@ -16,7 +16,7 @@ The first experience is **browse → notice → save → visit**. AI is not the 
 
 - Discover: human-edited collections and concise observations.
 - Place detail: identity, area, type, genres, atmosphere signals, hours, price, and editorial note.
-- Map: an editorial schematic with mood filters and numbered venue stories until verified provider data is connected.
+- Map: an editorial schematic with mood and genre filters and numbered venue stories until verified provider data is connected.
 - Google Maps handoff: an area search for fictional records, designed to accept exact Place IDs when real venues are introduced.
 - Saved: device-local saving, without requiring an account.
 - Japanese and English localization infrastructure.

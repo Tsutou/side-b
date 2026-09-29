@@ -31,7 +31,7 @@ Material 3 is the interaction and component foundation. Navigation uses `Navigat
 - `BrandHeader`: publication identity, edition, and language switch.
 - `VenueCard`: image, area, venue type, sound, editorial observation, save action.
 - `MapPreview`: layered Tokyo schematic, accessible numbered markers, and a single crossfading venue preview.
-- Map filters: Material `FilterChip` controls styled as record-like bubbles, with visible result counts and multi-select OR behavior.
+- Map filters: Material `FilterChip` controls styled as record-like bubbles, split into mood and genre rows. Selections use OR within a row and AND across rows, with a clear no-results state.
 - `SaveButton`: a 48px accessible toggle with semantic and tooltip labels.
 - `BottomNavigation`: three primary destinations with text on the active item.
 - Detail facts and venue signals: bordered factual units, not decorative pills.

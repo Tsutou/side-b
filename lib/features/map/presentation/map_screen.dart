@@ -9,7 +9,30 @@ import 'package:side_b/features/venues/domain/venue.dart';
 import 'package:side_b/features/venues/presentation/venue_detail_screen.dart';
 import 'package:side_b/shared/widgets/brand_header.dart';
 
-enum _VenueFilter { quiet, solo, late, vinyl, dj }
+enum _VenueFilter {
+  quiet,
+  late,
+  vinyl,
+  dj,
+  jazz,
+  soul,
+  cityPop,
+  ambient,
+  house,
+  rock,
+}
+
+extension on _VenueFilter {
+  bool get isGenre => switch (this) {
+    _VenueFilter.jazz ||
+    _VenueFilter.soul ||
+    _VenueFilter.cityPop ||
+    _VenueFilter.ambient ||
+    _VenueFilter.house ||
+    _VenueFilter.rock => true,
+    _ => false,
+  };
+}
 
 class MapScreen extends StatefulWidget {
   const MapScreen({
@@ -35,20 +58,34 @@ class _MapScreenState extends State<MapScreen> {
     _VenueFilter.quiet => venue.signals.any(
       (signal) => signal.contains('QUIET'),
     ),
-    _VenueFilter.solo => venue.signals.contains('SOLO FRIENDLY'),
     _VenueFilter.late => venue.signals.contains('LATE NIGHT'),
     _VenueFilter.vinyl => venue.signals.contains('VINYL'),
     _VenueFilter.dj =>
       venue.type == VenueType.djBar || venue.signals.contains('DJ TONIGHT'),
+    _VenueFilter.jazz => venue.genres.contains('JAZZ'),
+    _VenueFilter.soul => venue.genres.contains('SOUL'),
+    _VenueFilter.cityPop => venue.genres.contains('CITY POP'),
+    _VenueFilter.ambient => venue.genres.contains('AMBIENT'),
+    _VenueFilter.house => venue.genres.contains('HOUSE'),
+    _VenueFilter.rock => venue.genres.contains('ROCK'),
   };
 
   List<int> get _visibleIndices {
     if (_activeFilters.isEmpty) {
       return List<int>.generate(mockVenues.length, (index) => index);
     }
+    final moodFilters = _activeFilters.where((filter) => !filter.isGenre);
+    final genreFilters = _activeFilters.where((filter) => filter.isGenre);
     return [
       for (final entry in mockVenues.asMap().entries)
-        if (_activeFilters.any((filter) => _matchesFilter(entry.value, filter)))
+        if ((moodFilters.isEmpty ||
+                moodFilters.any(
+                  (filter) => _matchesFilter(entry.value, filter),
+                )) &&
+            (genreFilters.isEmpty ||
+                genreFilters.any(
+                  (filter) => _matchesFilter(entry.value, filter),
+                )))
           entry.key,
     ];
   }
@@ -61,7 +98,7 @@ class _MapScreenState extends State<MapScreen> {
         _activeFilters.remove(filter);
       }
       final visible = _visibleIndices;
-      if (!visible.contains(_selectedIndex)) {
+      if (visible.isNotEmpty && !visible.contains(_selectedIndex)) {
         _selectedIndex = visible.first;
       }
     });
@@ -253,32 +290,54 @@ class _FilterBubbles extends StatelessWidget {
 
   String _label(AppLocalizations copy, _VenueFilter filter) => switch (filter) {
     _VenueFilter.quiet => copy.t('filterQuiet'),
-    _VenueFilter.solo => copy.t('filterSolo'),
     _VenueFilter.late => copy.t('filterLate'),
     _VenueFilter.vinyl => copy.t('filterVinyl'),
     _VenueFilter.dj => copy.t('filterDj'),
+    _VenueFilter.jazz => copy.t('filterJazz'),
+    _VenueFilter.soul => copy.t('filterSoul'),
+    _VenueFilter.cityPop => copy.t('filterCityPop'),
+    _VenueFilter.ambient => copy.t('filterAmbient'),
+    _VenueFilter.house => copy.t('filterHouse'),
+    _VenueFilter.rock => copy.t('filterRock'),
   };
 
   @override
   Widget build(BuildContext context) {
     final copy = AppLocalizations.of(context);
-    return Semantics(
-      container: true,
-      label: copy.t('filterLabel'),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            copy.t('filterLabel'),
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge?.copyWith(color: SideBColors.vermilion),
-          ),
-          const SizedBox(height: SideBSpacing.sm),
-          Wrap(
-            spacing: SideBSpacing.xs,
-            runSpacing: SideBSpacing.xs,
-            children: [
+    const moodFilters = [
+      _VenueFilter.quiet,
+      _VenueFilter.late,
+      _VenueFilter.vinyl,
+      _VenueFilter.dj,
+    ];
+    const genreFilters = [
+      _VenueFilter.jazz,
+      _VenueFilter.soul,
+      _VenueFilter.cityPop,
+      _VenueFilter.ambient,
+      _VenueFilter.house,
+      _VenueFilter.rock,
+    ];
+
+    Widget filterGroup({
+      required String label,
+      required List<_VenueFilter> filters,
+      bool showAll = false,
+    }) => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: Theme.of(
+            context,
+          ).textTheme.labelLarge?.copyWith(color: SideBColors.vermilion),
+        ),
+        const SizedBox(height: SideBSpacing.sm),
+        Wrap(
+          spacing: SideBSpacing.xs,
+          runSpacing: SideBSpacing.xs,
+          children: [
+            if (showAll)
               _FilterBubble(
                 key: const ValueKey('filter-all'),
                 label: copy.t('filterAll'),
@@ -286,16 +345,32 @@ class _FilterBubbles extends StatelessWidget {
                 selected: activeFilters.isEmpty,
                 onSelected: (_) => onToggle(null),
               ),
-              for (final filter in _VenueFilter.values)
-                _FilterBubble(
-                  key: ValueKey('filter-${filter.name}'),
-                  label: _label(copy, filter),
-                  count: countFor(filter),
-                  selected: activeFilters.contains(filter),
-                  onSelected: (_) => onToggle(filter),
-                ),
-            ],
+            for (final filter in filters)
+              _FilterBubble(
+                key: ValueKey('filter-${filter.name}'),
+                label: _label(copy, filter),
+                count: countFor(filter),
+                selected: activeFilters.contains(filter),
+                onSelected: (_) => onToggle(filter),
+              ),
+          ],
+        ),
+      ],
+    );
+
+    return Semantics(
+      container: true,
+      label: copy.t('filterLabel'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          filterGroup(
+            label: copy.t('filterMoodLabel'),
+            filters: moodFilters,
+            showAll: true,
           ),
+          const SizedBox(height: SideBSpacing.md),
+          filterGroup(label: copy.t('filterGenreLabel'), filters: genreFilters),
         ],
       ),
     );
@@ -377,6 +452,15 @@ class _VenueIndex extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageCode = AppLocalizations.of(context).locale.languageCode;
+    if (visibleIndices.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: SideBSpacing.lg),
+        child: Text(
+          AppLocalizations.of(context).t('filterEmpty'),
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      );
+    }
     return LayoutBuilder(
       builder: (context, constraints) {
         final itemWidth =
@@ -541,9 +625,11 @@ class _MapPreview extends StatelessWidget {
     child: LayoutBuilder(
       builder: (context, constraints) {
         final compact = constraints.maxWidth < 620;
-        final languageCode = AppLocalizations.of(context).locale.languageCode;
+        final copy = AppLocalizations.of(context);
+        final languageCode = copy.locale.languageCode;
         final markerHeight = constraints.maxHeight - (compact ? 174 : 0);
-        final selectedVenue = mockVenues[selectedIndex];
+        final selectedVenue =
+            visibleIndices.isEmpty ? null : mockVenues[selectedIndex];
         return ClipRect(
           child: Stack(
             children: [
@@ -634,27 +720,42 @@ class _MapPreview extends StatelessWidget {
                   visibleCount: visibleIndices.length,
                 ),
               ),
-              Positioned(
-                left: compact ? 0 : null,
-                right: 0,
-                bottom: 0,
-                width: compact ? null : 340,
-                height: compact ? 174 : 226,
-                child: AnimatedSwitcher(
-                  duration: SideBMotion.standard,
-                  transitionBuilder:
-                      (child, animation) =>
-                          FadeTransition(opacity: animation, child: child),
-                  child: _SelectedVenue(
-                    key: ValueKey(selectedVenue.id),
-                    venue: selectedVenue,
-                    number: selectedIndex + 1,
-                    languageCode: languageCode,
-                    savedVenues: savedVenues,
-                    compact: compact,
+              if (selectedVenue == null)
+                Center(
+                  child: Container(
+                    color: SideBColors.paper,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SideBSpacing.lg,
+                      vertical: SideBSpacing.md,
+                    ),
+                    child: Text(
+                      copy.t('filterEmpty'),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                )
+              else
+                Positioned(
+                  left: compact ? 0 : null,
+                  right: 0,
+                  bottom: 0,
+                  width: compact ? null : 340,
+                  height: compact ? 174 : 226,
+                  child: AnimatedSwitcher(
+                    duration: SideBMotion.standard,
+                    transitionBuilder:
+                        (child, animation) =>
+                            FadeTransition(opacity: animation, child: child),
+                    child: _SelectedVenue(
+                      key: ValueKey(selectedVenue.id),
+                      venue: selectedVenue,
+                      number: selectedIndex + 1,
+                      languageCode: languageCode,
+                      savedVenues: savedVenues,
+                      compact: compact,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         );

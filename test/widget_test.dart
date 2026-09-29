@@ -107,6 +107,31 @@ void main() {
     expect(find.text('METER'), findsNWidgets(2));
     expect(find.text('ROOM 33'), findsNothing);
     expect(find.text('01 / 07'), findsOneWidget);
+    expect(find.text('ひとり向き'), findsNothing);
+  });
+
+  testWidgets('combines mood and genre filters and handles no results', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('filter-quiet')));
+    await tester.tap(find.byKey(const ValueKey('filter-jazz')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('ROOM 33'), findsNWidgets(2));
+    expect(find.text('BLUE HOUR'), findsNothing);
+    expect(find.text('01 / 07'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('filter-jazz')));
+    await tester.tap(find.byKey(const ValueKey('filter-house')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('この組み合わせに合う店はありません。'), findsWidgets);
+    expect(find.text('ROOM 33'), findsNothing);
   });
 
   testWidgets('shows the Google Maps area action on venue details', (
