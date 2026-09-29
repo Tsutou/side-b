@@ -13,12 +13,14 @@ class DiscoverScreen extends StatelessWidget {
     required this.savedVenues,
     required this.locale,
     required this.onLocaleChanged,
+    required this.onOpenMap,
     super.key,
   });
 
   final SavedVenuesController savedVenues;
   final Locale locale;
   final ValueChanged<Locale> onLocaleChanged;
+  final VoidCallback onOpenMap;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,9 @@ class DiscoverScreen extends StatelessWidget {
           ),
         ),
         SliverToBoxAdapter(child: _MockNotice(label: copy.t('mockNotice'))),
-        SliverToBoxAdapter(child: _Hero(savedVenues: savedVenues)),
+        SliverToBoxAdapter(
+          child: _Hero(savedVenues: savedVenues, onOpenMap: onOpenMap),
+        ),
         SliverToBoxAdapter(
           child: _EditorialNote(
             title: copy.t('editorsNote'),
@@ -125,8 +129,9 @@ class _MockNotice extends StatelessWidget {
 }
 
 class _Hero extends StatelessWidget {
-  const _Hero({required this.savedVenues});
+  const _Hero({required this.savedVenues, required this.onOpenMap});
   final SavedVenuesController savedVenues;
+  final VoidCallback onOpenMap;
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +188,18 @@ class _Hero extends StatelessWidget {
                       ).textTheme.bodyLarge?.copyWith(color: SideBColors.ink),
                     ),
                     const SizedBox(height: SideBSpacing.lg),
+                    FilledButton.icon(
+                      onPressed: onOpenMap,
+                      icon: const Icon(Icons.map_outlined),
+                      label: Text(copy.t('exploreMap')),
+                      style: FilledButton.styleFrom(
+                        minimumSize: const Size(0, SideBSizes.tapTarget),
+                        backgroundColor: SideBColors.ink,
+                        foregroundColor: SideBColors.ivory,
+                        textStyle: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    const SizedBox(height: SideBSpacing.xl),
                     Row(
                       children: [
                         Expanded(

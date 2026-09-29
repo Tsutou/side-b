@@ -26,4 +26,4 @@ Product scope and data policy are in [`docs/product.md`](docs/product.md). Visua
 
 ## Repository skills
 
-Project-specific Codex skills live in [`.agents/skills/`](.agents/skills/). They cover natural Japanese copy, design-engineering polish, mobile web behavior, and restrained motion design/review. Source attribution and licenses are documented in [`.agents/README.md`](.agents/README.md).
+Project-specific Codex skills live in [`.agents/skills/`](.agents/skills/). They cover natural Japanese and marketing copy, design-engineering polish, mobile web behavior, and restrained motion design/review. Product messaging context lives in [`.agents/product-marketing.md`](.agents/product-marketing.md); source attribution and licenses are documented in [`.agents/README.md`](.agents/README.md).

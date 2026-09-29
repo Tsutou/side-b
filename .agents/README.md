@@ -7,5 +7,6 @@ These Codex skills are scoped to the SIDE B repository and are discovered from
 
 - `natural-japanese`: <https://github.com/coji/natural-japanese>
 - Design and motion skills: <https://github.com/emilkowalski/skills>
+- `copywriting`: <https://github.com/coreyhaines31/marketingskills>
 
 The upstream MIT licenses are preserved in `.agents/licenses/`.

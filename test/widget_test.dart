@@ -28,10 +28,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('SIDE B'), findsOneWidget);
-    expect(find.text('音を聴きに、\n行きたい店。'), findsOneWidget);
-    final title = tester.widget<Text>(find.text('音を聴きに、\n行きたい店。'));
+    expect(find.text('今夜、音を聴きに\nどこへ行く？'), findsOneWidget);
+    final title = tester.widget<Text>(find.text('今夜、音を聴きに\nどこへ行く？'));
     expect(title.style?.fontFamily, 'NotoSansJP');
-    expect(find.textContaining('架空の特集'), findsOneWidget);
+    expect(find.textContaining('プロトタイプ号'), findsOneWidget);
     expect(find.text('ガイド'), findsOneWidget);
     expect(find.text('地図'), findsOneWidget);
     expect(find.text('保存'), findsOneWidget);
@@ -59,6 +59,20 @@ void main() {
     expect(find.text('01'), findsOneWidget);
   });
 
+  testWidgets('opens the map from the primary hero action', (tester) async {
+    await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+    await tester.pumpAndSettle();
+
+    final mapAction = find.text('地図から7軒を見る');
+    await tester.ensureVisible(mapAction);
+    await tester.pumpAndSettle();
+    await tester.tap(mapAction);
+    await tester.pumpAndSettle();
+
+    expect(find.text('次の一軒を、\n地図から。'), findsOneWidget);
+    expect(find.text('地図プレビュー / 架空の位置'), findsOneWidget);
+  });
+
   testWidgets('switches the interface to English', (tester) async {
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
@@ -66,10 +80,12 @@ void main() {
     await tester.tap(find.text('EN').first);
     await tester.pumpAndSettle();
 
-    expect(find.text('Places worth\nlistening to.'), findsOneWidget);
+    expect(find.text('Where will you\nlisten tonight?'), findsOneWidget);
     expect(find.text('Map'), findsOneWidget);
     expect(find.textContaining('JINBŌCHŌ'), findsWidgets);
-    final title = tester.widget<Text>(find.text('Places worth\nlistening to.'));
+    final title = tester.widget<Text>(
+      find.text('Where will you\nlisten tonight?'),
+    );
     expect(title.style?.fontFamily, 'Futura');
     final brand = tester.widget<Text>(find.text('SIDE B'));
     expect(brand.style?.fontFamily, 'Futura');
@@ -86,7 +102,7 @@ void main() {
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
 
-    expect(find.text('Places worth\nlistening to.'), findsOneWidget);
+    expect(find.text('Where will you\nlisten tonight?'), findsOneWidget);
     expect(find.text('EN'), findsWidgets);
   });
 
@@ -96,7 +112,7 @@ void main() {
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
 
-    final title = tester.widget<Text>(find.text('音を聴きに、\n行きたい店。'));
+    final title = tester.widget<Text>(find.text('今夜、音を聴きに\nどこへ行く？'));
 
     expect(title.style?.fontSize, 44);
     expect(title.style?.height, 1.08);
@@ -111,7 +127,7 @@ void main() {
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
 
-    expect(find.text('音を聴きに、\n行きたい店。'), findsOneWidget);
+    expect(find.text('今夜、音を聴きに\nどこへ行く？'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

@@ -37,6 +37,7 @@ class _SideBShellState extends State<SideBShell> {
               savedVenues: widget.savedVenues,
               locale: widget.locale,
               onLocaleChanged: widget.onLocaleChanged,
+              onOpenMap: () => setState(() => _index = 1),
             ),
             MapScreen(
               savedVenues: widget.savedVenues,

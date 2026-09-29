@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#F3ECD9",
     "theme_color": "#F3ECD9",
-    "description": "東京で、音を聴くために訪れたい場所を案内するミュージックバーガイド。",
+    "description": "選曲、店の空気、街、予算から、次の一軒を選べる東京ミュージックバーガイド。",
     "prefer_related_applications": false,
     "icons": [
         {
