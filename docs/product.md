@@ -16,7 +16,7 @@ The first experience is **browse → notice → save → visit**. AI is not the 
 
 - Discover: human-edited collections and concise observations.
 - Place detail: identity, area, type, genres, atmosphere signals, hours, price, and editorial note.
-- Map: an editorial schematic with mood and genre filters and numbered venue stories until verified provider data is connected.
+- Map: an editorial schematic with mood and genre filters and numbered venue stories until verified provider data is connected. The production map filters to venues within a verified 20-minute walking route from either the user's current location or a place they choose.
 - Google Maps handoff: an area search for fictional records, designed to accept exact Place IDs when real venues are introduced.
 - Saved: device-local saving, without requiring an account.
 - Japanese and English localization infrastructure.
@@ -47,5 +47,7 @@ The first meaningful funnel is venue viewed → venue saved → directions opene
 
 - Select and verify the first real editorial cohort.
 - Define provider and editorial field ownership before adding Google Places.
+- Add verified coordinates or Place IDs for every published venue, then connect a server-side walking-route matrix. Never infer a 20-minute walk from schematic positions or a fixed straight-line radius.
+- Request browser geolocation only after the user chooses “current location”; on denial or failure, keep “choose a place” available.
 - Decide how language selection persists.
 - Validate whether local saved places should migrate automatically after account creation.

@@ -145,6 +145,8 @@ class _MapScreenState extends State<MapScreen> {
                       children: [
                         _MapIntroduction(copy: copy, wide: wide),
                         const SizedBox(height: SideBSpacing.lg),
+                        const _WalkingScopePanel(),
+                        const SizedBox(height: SideBSpacing.lg),
                         _FilterBubbles(
                           activeFilters: _activeFilters,
                           onToggle: _toggleFilter,
@@ -209,6 +211,129 @@ class _MapScreenState extends State<MapScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _WalkingScopePanel extends StatelessWidget {
+  const _WalkingScopePanel();
+
+  Future<void> _showUnavailable(BuildContext context) => showDialog<void>(
+    context: context,
+    builder: (dialogContext) {
+      final copy = AppLocalizations.of(dialogContext);
+      return AlertDialog(
+        icon: const Icon(Icons.directions_walk),
+        title: Text(copy.t('walkingUnavailableTitle')),
+        content: Text(copy.t('walkingUnavailableBody')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(copy.t('walkingUnavailableAction')),
+          ),
+        ],
+      );
+    },
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final copy = AppLocalizations.of(context);
+    return Semantics(
+      container: true,
+      label: copy.t('walkingRangeLabel'),
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: SideBColors.midnight,
+          border: Border(
+            left: BorderSide(
+              color: SideBColors.albumYellow,
+              width: SideBBorders.strong * 2,
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(SideBSpacing.lg),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final compact = constraints.maxWidth < 620;
+              final heading = Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.directions_walk,
+                    color: SideBColors.albumYellow,
+                    size: 30,
+                  ),
+                  const SizedBox(width: SideBSpacing.sm),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          copy.t('walkingRangeLabel'),
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(color: SideBColors.white),
+                        ),
+                        const SizedBox(height: SideBSpacing.xs),
+                        Text(
+                          copy.t('walkingRangeBody'),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: SideBColors.ivory),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+              final actions = Wrap(
+                spacing: SideBSpacing.xs,
+                runSpacing: SideBSpacing.xs,
+                children: [
+                  FilledButton.icon(
+                    key: const ValueKey('walking-current-location'),
+                    onPressed: () => _showUnavailable(context),
+                    icon: const Icon(Icons.my_location),
+                    label: Text(copy.t('walkingCurrent')),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: SideBColors.albumYellow,
+                      foregroundColor: SideBColors.ink,
+                    ),
+                  ),
+                  OutlinedButton.icon(
+                    key: const ValueKey('walking-choose-location'),
+                    onPressed: () => _showUnavailable(context),
+                    icon: const Icon(Icons.search),
+                    label: Text(copy.t('walkingChoose')),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: SideBColors.white,
+                      side: const BorderSide(color: SideBColors.ivory),
+                    ),
+                  ),
+                ],
+              );
+              if (compact) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    heading,
+                    const SizedBox(height: SideBSpacing.md),
+                    actions,
+                  ],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(child: heading),
+                  const SizedBox(width: SideBSpacing.lg),
+                  actions,
+                ],
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }

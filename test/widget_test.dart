@@ -82,7 +82,7 @@ void main() {
   });
 
   testWidgets('selects a venue from the editorial map', (tester) async {
-    await tester.binding.setSurfaceSize(const Size(1280, 900));
+    await tester.binding.setSurfaceSize(const Size(1280, 1200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
@@ -108,6 +108,25 @@ void main() {
     expect(find.text('ROOM 33'), findsNothing);
     expect(find.text('01 / 07'), findsOneWidget);
     expect(find.text('ひとり向き'), findsNothing);
+  });
+
+  testWidgets('presents the honest 20-minute walking-area handoff', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('徒歩20分圏内'), findsOneWidget);
+    expect(find.text('現在地から'), findsOneWidget);
+    expect(find.text('場所を指定'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('walking-current-location')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('実在店版で対応予定'), findsOneWidget);
+    expect(find.textContaining('推定の徒歩時間を事実として表示しません'), findsOneWidget);
   });
 
   testWidgets('combines mood and genre filters and handles no results', (
