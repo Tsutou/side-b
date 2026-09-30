@@ -9,8 +9,8 @@ import 'package:side_b/features/venues/data/mock_venues.dart';
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  Future<void> openJapaneseGuide(WidgetTester tester) async {
-    await tester.tap(find.text('ガイド'));
+  Future<void> openJapaneseReading(WidgetTester tester) async {
+    await tester.tap(find.text('読む'));
     await tester.pumpAndSettle();
   }
 
@@ -39,7 +39,7 @@ void main() {
     expect(find.text('次の一軒を、\n地図から。'), findsOneWidget);
     expect(find.text('この地図にある7軒'), findsOneWidget);
     expect(find.text('ROOM 33'), findsWidgets);
-    expect(find.text('ガイド'), findsOneWidget);
+    expect(find.text('読む'), findsOneWidget);
     expect(find.text('地図'), findsOneWidget);
     expect(find.text('保存'), findsOneWidget);
     expect(find.textContaining('神保町'), findsWidgets);
@@ -58,15 +58,18 @@ void main() {
   });
 
   testWidgets('saves a venue and shows it in Saved', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 1800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     final saved = SavedVenuesController();
     await tester.pumpWidget(SideBApp(savedVenues: saved));
     await tester.pumpAndSettle();
-    await openJapaneseGuide(tester);
 
-    final saveControl = find.byKey(const ValueKey('save-room-33')).first;
-    await tester.ensureVisible(saveControl);
+    await tester.tap(find.text('ROOM 33').last);
     await tester.pumpAndSettle();
+    final saveControl = find.byKey(const ValueKey('save-room-33')).first;
     await tester.tap(saveControl);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
     await tester.tap(find.text('保存'));
     await tester.pumpAndSettle();
@@ -75,19 +78,21 @@ void main() {
     expect(find.text('01'), findsOneWidget);
   });
 
-  testWidgets('opens the map from the primary hero action', (tester) async {
+  testWidgets('shows a curated reading shelf from multiple publishers', (
+    tester,
+  ) async {
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
-    await openJapaneseGuide(tester);
+    await openJapaneseReading(tester);
 
-    final mapAction = find.text('地図から7軒を見る');
-    await tester.ensureVisible(mapAction);
-    await tester.pumpAndSettle();
-    await tester.tap(mapAction);
-    await tester.pumpAndSettle();
-
-    expect(find.text('次の一軒を、\n地図から。'), findsOneWidget);
-    expect(find.text('地図プレビュー / 架空の位置'), findsOneWidget);
+    expect(find.text('東京の音を、\n読む。'), findsOneWidget);
+    expect(find.text('NOTE'), findsNWidgets(2));
+    expect(find.text('ARBAN'), findsNWidgets(2));
+    expect(find.text('RESIDENT ADVISOR'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('read-shimokitazawa-cafe-hop')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('selects a venue from the editorial map', (tester) async {
@@ -185,14 +190,12 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Choose your next room\nfrom the map.'), findsOneWidget);
-    await tester.tap(find.text('Discover'));
+    await tester.tap(find.text('Read'));
     await tester.pumpAndSettle();
-    expect(find.text('Where will you\nlisten tonight?'), findsOneWidget);
+    expect(find.text('Read the sound\nof Tokyo.'), findsOneWidget);
     expect(find.text('Map'), findsOneWidget);
-    expect(find.textContaining('JINBŌCHŌ'), findsWidgets);
-    final title = tester.widget<Text>(
-      find.text('Where will you\nlisten tonight?'),
-    );
+    expect(find.text('RESIDENT ADVISOR'), findsOneWidget);
+    final title = tester.widget<Text>(find.text('Read the sound\nof Tokyo.'));
     expect(title.style?.fontFamily, 'Futura');
     final brand = tester.widget<Text>(find.text('SIDE B'));
     expect(brand.style?.fontFamily, 'Futura');
@@ -213,18 +216,20 @@ void main() {
     expect(find.text('EN'), findsWidgets);
   });
 
-  testWidgets('uses Japanese display metrics in the wide hero', (tester) async {
+  testWidgets('uses Japanese display metrics in the wide reading intro', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(1280, 900));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
-    await openJapaneseGuide(tester);
+    await openJapaneseReading(tester);
 
-    final title = tester.widget<Text>(find.text('今夜、音を聴きに\nどこへ行く？'));
+    final title = tester.widget<Text>(find.text('東京の音を、\n読む。'));
 
-    expect(title.style?.fontSize, 44);
-    expect(title.style?.height, 1.08);
-    expect(title.style?.letterSpacing, 0);
+    expect(title.style?.fontSize, 52);
+    expect(title.style?.height, 1.05);
+    expect(title.style?.letterSpacing, -1);
   });
 
   testWidgets('fits the Japanese edition on a compact mobile viewport', (
@@ -234,10 +239,29 @@ void main() {
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
-    await openJapaneseGuide(tester);
+    await openJapaneseReading(tester);
 
-    expect(find.text('今夜、音を聴きに\nどこへ行く？'), findsOneWidget);
+    expect(find.text('東京の音を、\n読む。'), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('meets automated accessibility guidelines on the reading shelf', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    try {
+      await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+      await tester.pumpAndSettle();
+      await openJapaneseReading(tester);
+
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+    } finally {
+      semantics.dispose();
+    }
   });
 
   testWidgets('reflows the Material 3 map controls at 320 logical pixels', (

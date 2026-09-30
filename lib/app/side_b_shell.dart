@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:side_b/core/localization/app_localizations.dart';
-import 'package:side_b/features/discover/presentation/discover_screen.dart';
 import 'package:side_b/features/map/presentation/map_screen.dart';
+import 'package:side_b/features/reading/presentation/reading_screen.dart';
 import 'package:side_b/features/saved/application/saved_venues_controller.dart';
 import 'package:side_b/features/saved/presentation/saved_screen.dart';
 
@@ -38,17 +38,15 @@ class _SideBShellState extends State<SideBShell> {
               locale: widget.locale,
               onLocaleChanged: widget.onLocaleChanged,
             ),
-            DiscoverScreen(
-              savedVenues: widget.savedVenues,
+            ReadingScreen(
               locale: widget.locale,
               onLocaleChanged: widget.onLocaleChanged,
-              onOpenMap: () => setState(() => _index = 0),
             ),
             SavedScreen(
               savedVenues: widget.savedVenues,
               locale: widget.locale,
               onLocaleChanged: widget.onLocaleChanged,
-              onBrowse: () => setState(() => _index = 1),
+              onBrowse: () => setState(() => _index = 0),
             ),
           ],
         ),
@@ -67,9 +65,9 @@ class _SideBShellState extends State<SideBShell> {
                 label: copy.t('map'),
               ),
               NavigationDestination(
-                icon: const Icon(Icons.explore_outlined),
-                selectedIcon: const Icon(Icons.explore),
-                label: copy.t('discover'),
+                icon: const Icon(Icons.menu_book_outlined),
+                selectedIcon: const Icon(Icons.menu_book),
+                label: copy.t('read'),
               ),
               NavigationDestination(
                 icon: const Icon(Icons.bookmark_border),

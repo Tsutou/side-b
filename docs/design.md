@@ -34,6 +34,7 @@ Material 3 is the interaction and component foundation. Navigation uses `Navigat
 - Map filters: Material `FilterChip` controls styled as record-like bubbles, split into mood and genre rows. Selections use OR within a row and AND across rows, with a clear no-results state.
 - `SaveButton`: a 48px accessible toggle with semantic and tooltip labels.
 - `BottomNavigation`: three primary destinations with text on the active item.
+- `ReadingShelf`: text-first article cards with visible source metadata, a single outbound action, and typographic artwork instead of third-party embeds or thumbnails.
 - Detail facts and venue signals: bordered factual units, not decorative pills.
 - Google Maps action: a full-width detail CTA that searches the venue's area during the fictional-data phase; production records will add Place IDs for exact destinations.
 

@@ -14,6 +14,7 @@ class AppLocalizations {
   static const _values = <String, Map<String, String>>{
     'en': {
       'discover': 'Discover',
+      'read': 'Read',
       'map': 'Map',
       'saved': 'Saved',
       'guide': 'TOKYO MUSIC BAR GUIDE',
@@ -82,9 +83,20 @@ class AppLocalizations {
           'Original painted illustration of a fictional Tokyo listening bar',
       'detailImageLabel': 'Fictional interior photograph',
       'mockPlaceLabel': 'FICTIONAL VENUE / PROTOTYPE DATA',
+      'readKicker': 'SIDE B READING ROOM / 7 PICKS',
+      'readTitle': 'Read the sound\nof Tokyo.',
+      'readBody':
+          'Personal walks, owner interviews, and films that reveal how a room finds its sound.',
+      'readFeatured': 'START HERE',
+      'readShelf': 'FROM THE READING SHELF',
+      'readArticle': 'READ THE ORIGINAL',
+      'readDisclosure':
+          'Links open the original publishers. SIDE B adds only its own short editorial note; article text and images are not reproduced here.',
+      'readError': 'Could not open the article.',
     },
     'ja': {
       'discover': 'ガイド',
+      'read': '読む',
       'map': '地図',
       'saved': '保存',
       'guide': '東京ミュージックバーガイド',
@@ -146,6 +158,14 @@ class AppLocalizations {
       'heroImageLabel': '架空の東京のリスニングバーを描いたオリジナルイラスト',
       'detailImageLabel': '架空の店内写真',
       'mockPlaceLabel': '架空の店舗 / モックデータ',
+      'readKicker': 'SIDE B READING ROOM / 7 PICKS',
+      'readTitle': '東京の音を、\n読む。',
+      'readBody': '街を歩いた人の記録、店主への取材、音を追った映像。店へ行く前と、帰った後に読みたいものを集めました。',
+      'readFeatured': 'まず、この一本',
+      'readShelf': '読む棚から',
+      'readArticle': '元の記事を読む',
+      'readDisclosure': 'リンク先は各媒体のページです。SIDE Bは短い編集メモだけを加え、記事本文や画像は転載していません。',
+      'readError': '記事を開けませんでした。',
     },
   };
 

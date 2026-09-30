@@ -1,0 +1,471 @@
+import 'package:flutter/material.dart';
+import 'package:side_b/core/design/tokens.dart';
+import 'package:side_b/core/localization/app_localizations.dart';
+import 'package:side_b/features/reading/data/curated_articles.dart';
+import 'package:side_b/features/reading/domain/curated_article.dart';
+import 'package:side_b/shared/widgets/brand_header.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class ReadingScreen extends StatelessWidget {
+  const ReadingScreen({
+    required this.locale,
+    required this.onLocaleChanged,
+    super.key,
+  });
+
+  final Locale locale;
+  final ValueChanged<Locale> onLocaleChanged;
+
+  Future<void> _openArticle(
+    BuildContext context,
+    CuratedArticle article,
+  ) async {
+    final opened = await launchUrl(
+      article.url,
+      mode: LaunchMode.externalApplication,
+    );
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context).t('readError'))),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final copy = AppLocalizations.of(context);
+    final featured = curatedArticles.firstWhere((article) => article.featured);
+    final rest = curatedArticles.where((article) => !article.featured).toList();
+    return CustomScrollView(
+      key: const PageStorageKey('reading'),
+      slivers: [
+        SliverToBoxAdapter(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: SideBSizes.contentMaxWidth,
+              ),
+              child: BrandHeader(
+                locale: locale,
+                onLocaleChanged: onLocaleChanged,
+              ),
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(child: _ReadingIntro(copy: copy)),
+        SliverToBoxAdapter(
+          child: _ReadingBody(
+            featured: featured,
+            articles: rest,
+            onOpen: (article) => _openArticle(context, article),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ReadingIntro extends StatelessWidget {
+  const _ReadingIntro({required this.copy});
+  final AppLocalizations copy;
+
+  @override
+  Widget build(BuildContext context) {
+    final isJapanese = copy.locale.languageCode == 'ja';
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: SideBSizes.contentMaxWidth),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            SideBSpacing.lg,
+            SideBSpacing.lg,
+            SideBSpacing.lg,
+            SideBSpacing.xl,
+          ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final wide = constraints.maxWidth >= 760;
+              final title = Text(
+                copy.t('readTitle'),
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                  fontSize: isJapanese ? (wide ? 52 : 42) : (wide ? 64 : 48),
+                  height: isJapanese ? 1.05 : .94,
+                  letterSpacing: isJapanese ? -1 : -2.4,
+                ),
+              );
+              final note = Container(
+                decoration: BoxDecoration(
+                  color: SideBColors.albumYellow,
+                  borderRadius: BorderRadius.circular(SideBRadii.extraLarge),
+                ),
+                padding: const EdgeInsets.all(SideBSpacing.lg),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      copy.t('readKicker'),
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: SideBColors.oxblood,
+                      ),
+                    ),
+                    const SizedBox(height: SideBSpacing.sm),
+                    Text(
+                      copy.t('readBody'),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ],
+                ),
+              );
+              if (!wide) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    title,
+                    const SizedBox(height: SideBSpacing.lg),
+                    note,
+                  ],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(flex: 6, child: title),
+                  const SizedBox(width: SideBSpacing.xxl),
+                  Expanded(flex: 4, child: note),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ReadingBody extends StatelessWidget {
+  const _ReadingBody({
+    required this.featured,
+    required this.articles,
+    required this.onOpen,
+  });
+
+  final CuratedArticle featured;
+  final List<CuratedArticle> articles;
+  final ValueChanged<CuratedArticle> onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final copy = AppLocalizations.of(context);
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: SideBSizes.contentMaxWidth),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            SideBSpacing.lg,
+            0,
+            SideBSpacing.lg,
+            SideBSpacing.display,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _SectionLabel(number: '01', label: copy.t('readFeatured')),
+              const SizedBox(height: SideBSpacing.md),
+              _FeaturedArticle(article: featured, onOpen: onOpen),
+              const SizedBox(height: SideBSpacing.xxl),
+              _SectionLabel(number: '02', label: copy.t('readShelf')),
+              const SizedBox(height: SideBSpacing.md),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final columns = constraints.maxWidth >= 760 ? 2 : 1;
+                  final cardWidth =
+                      columns == 2
+                          ? (constraints.maxWidth - SideBSpacing.lg) / 2
+                          : constraints.maxWidth;
+                  return Wrap(
+                    spacing: SideBSpacing.lg,
+                    runSpacing: SideBSpacing.lg,
+                    children: [
+                      for (final article in articles)
+                        SizedBox(
+                          width: cardWidth,
+                          child: _ArticleCard(article: article, onOpen: onOpen),
+                        ),
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: SideBSpacing.xl),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: Theme.of(context).colorScheme.outlineVariant,
+                    ),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: SideBSpacing.md),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.open_in_new, size: 18),
+                      const SizedBox(width: SideBSpacing.sm),
+                      Expanded(
+                        child: Text(
+                          copy.t('readDisclosure'),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({required this.number, required this.label});
+  final String number;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      Text(
+        number,
+        style: Theme.of(
+          context,
+        ).textTheme.labelLarge?.copyWith(color: SideBColors.vermilion),
+      ),
+      const SizedBox(width: SideBSpacing.md),
+      Expanded(child: Divider(color: Theme.of(context).colorScheme.outline)),
+      const SizedBox(width: SideBSpacing.md),
+      Text(label, style: Theme.of(context).textTheme.labelLarge),
+    ],
+  );
+}
+
+class _FeaturedArticle extends StatelessWidget {
+  const _FeaturedArticle({required this.article, required this.onOpen});
+  final CuratedArticle article;
+  final ValueChanged<CuratedArticle> onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final copy = AppLocalizations.of(context);
+    final languageCode = copy.locale.languageCode;
+    return Card(
+      color: SideBColors.midnight,
+      child: Padding(
+        padding: const EdgeInsets.all(SideBSpacing.xl),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final wide = constraints.maxWidth >= 720;
+            final number = Container(
+              width: wide ? 190 : double.infinity,
+              height: wide ? 190 : 112,
+              decoration: BoxDecoration(
+                color: SideBColors.vermilion,
+                borderRadius: BorderRadius.circular(SideBRadii.large),
+              ),
+              alignment: Alignment.bottomLeft,
+              padding: const EdgeInsets.all(SideBSpacing.lg),
+              child: const Text(
+                '33⅓',
+                style: TextStyle(
+                  fontFamily: 'Futura',
+                  color: SideBColors.white,
+                  fontSize: 52,
+                  fontWeight: FontWeight.w700,
+                  height: .9,
+                  letterSpacing: -2,
+                ),
+              ),
+            );
+            final content = Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _ArticleMeta(article: article, onDark: true),
+                const SizedBox(height: SideBSpacing.md),
+                Text(
+                  article.titleFor(languageCode),
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: SideBColors.white,
+                    fontSize: wide ? 32 : 26,
+                    height: 1.15,
+                  ),
+                ),
+                const SizedBox(height: SideBSpacing.md),
+                Text(
+                  article.noteFor(languageCode),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: SideBColors.ivory),
+                ),
+                const SizedBox(height: SideBSpacing.lg),
+                _Tags(article: article, onDark: true),
+                const SizedBox(height: SideBSpacing.lg),
+                FilledButton.icon(
+                  key: ValueKey('read-${article.id}'),
+                  onPressed: () => onOpen(article),
+                  icon: const Icon(Icons.north_east),
+                  label: Text(copy.t('readArticle')),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: SideBColors.albumYellow,
+                    foregroundColor: SideBColors.ink,
+                  ),
+                ),
+              ],
+            );
+            if (!wide) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  number,
+                  const SizedBox(height: SideBSpacing.lg),
+                  content,
+                ],
+              );
+            }
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                number,
+                const SizedBox(width: SideBSpacing.xl),
+                Expanded(child: content),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _ArticleCard extends StatelessWidget {
+  const _ArticleCard({required this.article, required this.onOpen});
+  final CuratedArticle article;
+  final ValueChanged<CuratedArticle> onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final copy = AppLocalizations.of(context);
+    final languageCode = copy.locale.languageCode;
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(SideBSpacing.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _ArticleMeta(article: article),
+            const SizedBox(height: SideBSpacing.md),
+            Text(
+              article.titleFor(languageCode),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontSize: 20, height: 1.3),
+            ),
+            const SizedBox(height: SideBSpacing.sm),
+            Text(
+              article.noteFor(languageCode),
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: SideBSpacing.md),
+            _Tags(article: article),
+            const SizedBox(height: SideBSpacing.sm),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                key: ValueKey('read-${article.id}'),
+                onPressed: () => onOpen(article),
+                iconAlignment: IconAlignment.end,
+                icon: const Icon(Icons.north_east, size: 18),
+                label: Text(copy.t('readArticle')),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ArticleMeta extends StatelessWidget {
+  const _ArticleMeta({required this.article, this.onDark = false});
+  final CuratedArticle article;
+  final bool onDark;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = onDark ? SideBColors.albumYellow : SideBColors.vermilion;
+    final secondary = onDark ? SideBColors.ivory : SideBColors.inkSoft;
+    return Wrap(
+      spacing: SideBSpacing.sm,
+      runSpacing: SideBSpacing.xs,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Text(
+          article.source.toUpperCase(),
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(color: color),
+        ),
+        Text(
+          '${article.author}  /  ${article.dateLabel}',
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(color: secondary, letterSpacing: .5),
+        ),
+      ],
+    );
+  }
+}
+
+class _Tags extends StatelessWidget {
+  const _Tags({required this.article, this.onDark = false});
+  final CuratedArticle article;
+  final bool onDark;
+
+  @override
+  Widget build(BuildContext context) {
+    final languageCode = AppLocalizations.of(context).locale.languageCode;
+    return Wrap(
+      spacing: SideBSpacing.xs,
+      runSpacing: SideBSpacing.xs,
+      children: [
+        for (final tag in article.tagsFor(languageCode))
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: SideBSpacing.sm,
+              vertical: SideBSpacing.xs,
+            ),
+            decoration: BoxDecoration(
+              color:
+                  onDark
+                      ? SideBColors.white.withValues(alpha: .08)
+                      : Theme.of(context).colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(SideBRadii.round),
+              border: Border.all(
+                color:
+                    onDark
+                        ? SideBColors.white.withValues(alpha: .3)
+                        : Theme.of(context).colorScheme.outlineVariant,
+              ),
+            ),
+            child: Text(
+              tag,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: onDark ? SideBColors.ivory : SideBColors.inkSoft,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
