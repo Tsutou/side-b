@@ -1,3 +1,14 @@
+enum ArticleFacet {
+  all,
+  japanese,
+  english,
+  neighborhood,
+  people,
+  sound,
+  film,
+  practical,
+}
+
 class CuratedArticle {
   const CuratedArticle({
     required this.id,
@@ -11,6 +22,7 @@ class CuratedArticle {
     required this.tagsJa,
     required this.tagsEn,
     required this.url,
+    required this.facets,
     this.featured = false,
     this.visitorPick = false,
   });
@@ -26,6 +38,7 @@ class CuratedArticle {
   final List<String> tagsJa;
   final List<String> tagsEn;
   final Uri url;
+  final Set<ArticleFacet> facets;
   final bool featured;
   final bool visitorPick;
 
@@ -36,4 +49,7 @@ class CuratedArticle {
 
   List<String> tagsFor(String languageCode) =>
       languageCode == 'ja' ? tagsJa : tagsEn;
+
+  bool matches(ArticleFacet facet) =>
+      facet == ArticleFacet.all || facets.contains(facet);
 }

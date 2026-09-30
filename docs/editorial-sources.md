@@ -6,6 +6,8 @@ The reading shelf helps someone understand Tokyo's listening culture before visi
 
 The shelf is deliberately mixed. Personal writing on note keeps the reader close to an ordinary visit. Specialist publications such as ARBAN and Mikiki add reporting and musical context. Time Out Tokyo is useful for concise, practical orientation. Resident Advisor supplies an international view of Japanese listening-bar culture, especially through film. Visitor's View groups English-language reporting and official travel context without hiding it from Japanese readers. Future additions can come from independent newsletters, venue journals, local magazines, radio archives, podcasts, and books, provided the original source and rights are clear.
 
+Each article has one language facet and one or more editorial-angle facets. The Reading filters use this reviewed metadata rather than inferring categories at runtime.
+
 ## Publication rules
 
 - Link to the original publisher. Do not copy article bodies or reuse publisher images.

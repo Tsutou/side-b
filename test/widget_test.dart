@@ -81,6 +81,8 @@ void main() {
   testWidgets('shows a curated reading shelf from multiple publishers', (
     tester,
   ) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
     await openJapaneseReading(tester);
@@ -99,6 +101,45 @@ void main() {
       find.byKey(const ValueKey('read-timeout-listening-bars')),
       findsOneWidget,
     );
+    expect(find.text('10本'), findsOneWidget);
+    expect(find.text('すべて'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('reading-filter-english')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('filters the reading shelf with editorial bubbles', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+    await tester.pumpAndSettle();
+    await openJapaneseReading(tester);
+
+    await tester.tap(find.byKey(const ValueKey('reading-filter-english')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('4本'), findsOneWidget);
+    expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('read-timeout-listening-bars')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('read-tokyo-record-cafe-tour')),
+      findsNothing,
+    );
+    expect(find.text('まず、この一本'), findsNothing);
+
+    await tester.tap(find.byKey(const ValueKey('reading-filter-neighborhood')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('4本'), findsOneWidget);
+    expect(find.text('まず、この一本'), findsOneWidget);
+    expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
+    expect(find.text('読む棚から'), findsOneWidget);
   });
 
   testWidgets('selects a venue from the editorial map', (tester) async {
@@ -189,6 +230,8 @@ void main() {
   });
 
   testWidgets('switches the interface to English', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
     await tester.pumpAndSettle();
 
@@ -249,6 +292,7 @@ void main() {
     await openJapaneseReading(tester);
 
     expect(find.text('東京の音を、\n読む。'), findsOneWidget);
+    expect(find.text('読む棚を絞り込む'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

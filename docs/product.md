@@ -14,7 +14,7 @@ The first experience is **browse → notice → save → visit**. AI is not the 
 
 ## Phase 1 scope
 
-- Read: a lightweight, human-edited shelf of external essays, interviews, city guides, and films about Tokyo listening culture. A dedicated Visitor's View mixes English-language reporting with an official neighborhood primer, so the English interface is useful rather than merely translated. Each item keeps the publisher, author, date, and original URL visible; SIDE B adds only a short bilingual note.
+- Read: a lightweight, human-edited shelf of external essays, interviews, city guides, and films about Tokyo listening culture. A dedicated Visitor's View mixes English-language reporting with an official neighborhood primer, so the English interface is useful rather than merely translated. Readers can filter the full shelf by language or editorial angle—neighborhoods, people, sound, film, or practical planning. Each item keeps the publisher, author, date, and original URL visible; SIDE B adds only a short bilingual note.
 - Place detail: identity, area, type, genres, atmosphere signals, hours, price, and editorial note.
 - Map: an editorial schematic with mood and genre filters and numbered venue stories until verified provider data is connected. The production map filters to venues within a verified 20-minute walking route from either the user's current location or a place they choose.
 - Google Maps handoff: an area search for fictional records, designed to accept exact Place IDs when real venues are introduced.

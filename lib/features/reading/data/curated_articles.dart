@@ -14,6 +14,11 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['下北沢', 'ジャズ喫茶', '街歩き'],
     tagsEn: ['Shimokitazawa', 'Jazz kissa', 'Walk'],
     url: Uri.parse('https://note.com/okumoris/n/n02c163278518'),
+    facets: {
+      ArticleFacet.japanese,
+      ArticleFacet.neighborhood,
+      ArticleFacet.sound,
+    },
     featured: true,
   ),
   CuratedArticle(
@@ -29,6 +34,11 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['渋谷', '御茶ノ水', 'レコード'],
     tagsEn: ['Shibuya', 'Ochanomizu', 'Vinyl'],
     url: Uri.parse('https://note.com/keisuko/n/nf2598a8f7e97'),
+    facets: {
+      ArticleFacet.japanese,
+      ArticleFacet.neighborhood,
+      ArticleFacet.practical,
+    },
   ),
   CuratedArticle(
     id: 'tonlist',
@@ -44,6 +54,7 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['下北沢', '音響', '店主'],
     tagsEn: ['Shimokitazawa', 'Sound', 'Owner'],
     url: Uri.parse('https://www.arban-mag.com/article/76910'),
+    facets: {ArticleFacet.japanese, ArticleFacet.people, ArticleFacet.sound},
   ),
   CuratedArticle(
     id: 'music-bar-michi',
@@ -58,6 +69,7 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['湯島', 'シティポップ', '深夜'],
     tagsEn: ['Yushima', 'City pop', 'Late'],
     url: Uri.parse('https://www.timeout.jp/tokyo/ja/%E3%83%90%E3%83%BC/michi'),
+    facets: {ArticleFacet.japanese, ArticleFacet.practical, ArticleFacet.sound},
   ),
   CuratedArticle(
     id: 'shelter-film',
@@ -72,6 +84,7 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['八王子', '音響', '映像'],
     tagsEn: ['Hachioji', 'Sound', 'Film'],
     url: Uri.parse('https://ra.co/features/3496'),
+    facets: {ArticleFacet.english, ArticleFacet.sound, ArticleFacet.film},
     visitorPick: true,
   ),
   CuratedArticle(
@@ -88,6 +101,11 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['下北沢', 'ライブ', '老舗'],
     tagsEn: ['Shimokitazawa', 'Live', 'History'],
     url: Uri.parse('https://www.arban-mag.com/article/4977'),
+    facets: {
+      ArticleFacet.japanese,
+      ArticleFacet.people,
+      ArticleFacet.neighborhood,
+    },
   ),
   CuratedArticle(
     id: 'tower-records-beer',
@@ -103,6 +121,7 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['渋谷', '選盤', '新しい店'],
     tagsEn: ['Shibuya', 'Selection', 'New opening'],
     url: Uri.parse('https://mikiki.tokyo.jp/articles/-/45992'),
+    facets: {ArticleFacet.japanese, ArticleFacet.people, ArticleFacet.sound},
   ),
   CuratedArticle(
     id: 'timeout-listening-bars',
@@ -119,6 +138,7 @@ final curatedArticles = <CuratedArticle>[
     url: Uri.parse(
       'https://www.timeout.com/tokyo/nightlife/top-music-bars-in-tokyo',
     ),
+    facets: {ArticleFacet.english, ArticleFacet.practical, ArticleFacet.sound},
     visitorPick: true,
   ),
   CuratedArticle(
@@ -134,6 +154,7 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['英語', '音響', 'ロングリード'],
     tagsEn: ['English', 'Audiophile', 'Long read'],
     url: Uri.parse('https://ra.co/features/2724'),
+    facets: {ArticleFacet.english, ArticleFacet.sound},
     visitorPick: true,
   ),
   CuratedArticle(
@@ -151,6 +172,11 @@ final curatedArticles = <CuratedArticle>[
     url: Uri.parse(
       'https://www.japan.travel/en/destinations/kanto/tokyo/shibuya-and-shimokitazawa/',
     ),
+    facets: {
+      ArticleFacet.english,
+      ArticleFacet.neighborhood,
+      ArticleFacet.practical,
+    },
     visitorPick: true,
   ),
 ];

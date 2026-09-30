@@ -6,7 +6,7 @@ import 'package:side_b/features/reading/domain/curated_article.dart';
 import 'package:side_b/shared/widgets/brand_header.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ReadingScreen extends StatelessWidget {
+class ReadingScreen extends StatefulWidget {
   const ReadingScreen({
     required this.locale,
     required this.onLocaleChanged,
@@ -15,6 +15,13 @@ class ReadingScreen extends StatelessWidget {
 
   final Locale locale;
   final ValueChanged<Locale> onLocaleChanged;
+
+  @override
+  State<ReadingScreen> createState() => _ReadingScreenState();
+}
+
+class _ReadingScreenState extends State<ReadingScreen> {
+  ArticleFacet _facet = ArticleFacet.all;
 
   Future<void> _openArticle(
     BuildContext context,
@@ -35,10 +42,12 @@ class ReadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final copy = AppLocalizations.of(context);
     final featured = curatedArticles.firstWhere((article) => article.featured);
+    final filtered =
+        curatedArticles.where((article) => article.matches(_facet)).toList();
     final visitorArticles =
-        curatedArticles.where((article) => article.visitorPick).toList();
+        filtered.where((article) => article.visitorPick).toList();
     final rest =
-        curatedArticles
+        filtered
             .where((article) => !article.featured && !article.visitorPick)
             .toList();
     return CustomScrollView(
@@ -51,22 +60,114 @@ class ReadingScreen extends StatelessWidget {
                 maxWidth: SideBSizes.contentMaxWidth,
               ),
               child: BrandHeader(
-                locale: locale,
-                onLocaleChanged: onLocaleChanged,
+                locale: widget.locale,
+                onLocaleChanged: widget.onLocaleChanged,
               ),
             ),
           ),
         ),
         SliverToBoxAdapter(child: _ReadingIntro(copy: copy)),
         SliverToBoxAdapter(
+          child: _ReadingFilters(
+            selected: _facet,
+            resultCount: filtered.length,
+            onSelected: (facet) => setState(() => _facet = facet),
+          ),
+        ),
+        SliverToBoxAdapter(
           child: _ReadingBody(
             featured: featured,
+            showFeatured: featured.matches(_facet),
             visitorArticles: visitorArticles,
             articles: rest,
             onOpen: (article) => _openArticle(context, article),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ReadingFilters extends StatelessWidget {
+  const _ReadingFilters({
+    required this.selected,
+    required this.resultCount,
+    required this.onSelected,
+  });
+
+  final ArticleFacet selected;
+  final int resultCount;
+  final ValueChanged<ArticleFacet> onSelected;
+
+  String _label(AppLocalizations copy, ArticleFacet facet) => switch (facet) {
+    ArticleFacet.all => copy.t('readFilterAll'),
+    ArticleFacet.japanese => copy.t('readFilterJapanese'),
+    ArticleFacet.english => copy.t('readFilterEnglish'),
+    ArticleFacet.neighborhood => copy.t('readFilterNeighborhood'),
+    ArticleFacet.people => copy.t('readFilterPeople'),
+    ArticleFacet.sound => copy.t('readFilterSound'),
+    ArticleFacet.film => copy.t('readFilterFilm'),
+    ArticleFacet.practical => copy.t('readFilterPractical'),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final copy = AppLocalizations.of(context);
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: SideBSizes.contentMaxWidth),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            SideBSpacing.lg,
+            0,
+            SideBSpacing.lg,
+            SideBSpacing.xl,
+          ),
+          child: Semantics(
+            container: true,
+            label: copy.t('readFilterLabel'),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        copy.t('readFilterLabel'),
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    Text(
+                      copy.locale.languageCode == 'ja'
+                          ? '$resultCount${copy.t('readResultCount')}'
+                          : '$resultCount ${copy.t('readResultCount')}',
+                      key: const ValueKey('reading-result-count'),
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: SideBColors.vermilion,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: SideBSpacing.sm),
+                Wrap(
+                  spacing: SideBSpacing.xs,
+                  runSpacing: SideBSpacing.xs,
+                  children: [
+                    for (final facet in ArticleFacet.values)
+                      FilterChip(
+                        key: ValueKey('reading-filter-${facet.name}'),
+                        label: Text(_label(copy, facet)),
+                        selected: selected == facet,
+                        onSelected: (_) => onSelected(facet),
+                        tooltip: _label(copy, facet),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -151,12 +252,14 @@ class _ReadingIntro extends StatelessWidget {
 class _ReadingBody extends StatelessWidget {
   const _ReadingBody({
     required this.featured,
+    required this.showFeatured,
     required this.visitorArticles,
     required this.articles,
     required this.onOpen,
   });
 
   final CuratedArticle featured;
+  final bool showFeatured;
   final List<CuratedArticle> visitorArticles;
   final List<CuratedArticle> articles;
   final ValueChanged<CuratedArticle> onOpen;
@@ -177,22 +280,39 @@ class _ReadingBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _SectionLabel(number: '01', label: copy.t('readFeatured')),
-              const SizedBox(height: SideBSpacing.md),
-              _FeaturedArticle(article: featured, onOpen: onOpen),
-              const SizedBox(height: SideBSpacing.xxl),
-              _SectionLabel(number: '02', label: copy.t('readVisitor')),
-              const SizedBox(height: SideBSpacing.sm),
-              Text(
-                copy.t('readVisitorBody'),
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const SizedBox(height: SideBSpacing.md),
-              _ArticleGrid(articles: visitorArticles, onOpen: onOpen),
-              const SizedBox(height: SideBSpacing.xxl),
-              _SectionLabel(number: '03', label: copy.t('readShelf')),
-              const SizedBox(height: SideBSpacing.md),
-              _ArticleGrid(articles: articles, onOpen: onOpen),
+              if (showFeatured) ...[
+                _SectionLabel(number: '01', label: copy.t('readFeatured')),
+                const SizedBox(height: SideBSpacing.md),
+                _FeaturedArticle(article: featured, onOpen: onOpen),
+                const SizedBox(height: SideBSpacing.xxl),
+              ],
+              if (visitorArticles.isNotEmpty) ...[
+                _SectionLabel(number: '02', label: copy.t('readVisitor')),
+                const SizedBox(height: SideBSpacing.sm),
+                Text(
+                  copy.t('readVisitorBody'),
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                const SizedBox(height: SideBSpacing.md),
+                _ArticleGrid(articles: visitorArticles, onOpen: onOpen),
+                const SizedBox(height: SideBSpacing.xxl),
+              ],
+              if (articles.isNotEmpty) ...[
+                _SectionLabel(number: '03', label: copy.t('readShelf')),
+                const SizedBox(height: SideBSpacing.md),
+                _ArticleGrid(articles: articles, onOpen: onOpen),
+              ],
+              if (!showFeatured && visitorArticles.isEmpty && articles.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: SideBSpacing.xxl,
+                  ),
+                  child: Text(
+                    copy.t('readFilterEmpty'),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
               const SizedBox(height: SideBSpacing.xl),
               DecoratedBox(
                 decoration: BoxDecoration(
