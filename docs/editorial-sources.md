@@ -4,7 +4,7 @@
 
 The reading shelf helps someone understand Tokyo's listening culture before visiting a place or after coming home. A useful piece offers at least one of these: a first-person route through a neighborhood, an interview with the person shaping a room, a close look at sound and selection, or a record of how a venue and its city changed together.
 
-The shelf is deliberately mixed. Personal writing on note keeps the reader close to an ordinary visit. Specialist publications such as ARBAN and Mikiki add reporting and musical context. Time Out Tokyo is useful for concise, practical orientation. Resident Advisor supplies an international view of Japanese listening-bar culture, especially through film. Future additions can come from independent newsletters, venue journals, local magazines, radio archives, podcasts, and books, provided the original source and rights are clear.
+The shelf is deliberately mixed. Personal writing on note keeps the reader close to an ordinary visit. Specialist publications such as ARBAN and Mikiki add reporting and musical context. Time Out Tokyo is useful for concise, practical orientation. Resident Advisor supplies an international view of Japanese listening-bar culture, especially through film. Visitor's View groups English-language reporting and official travel context without hiding it from Japanese readers. Future additions can come from independent newsletters, venue journals, local magazines, radio archives, podcasts, and books, provided the original source and rights are clear.
 
 ## Publication rules
 
@@ -26,3 +26,6 @@ Checked on 2026-09-30.
 5. Resident Advisor — [Japan's Hidden Listening Bars: SHeLTeR](https://ra.co/features/3496), 2019-07-11.
 6. ARBAN / 富山英三郎 — [【東京・下北沢／LADY JANE】刺激的なライブが楽しめる、老舗ジャズバー](https://www.arban-mag.com/article/4977), 2017-03-23; updated 2020-11-25.
 7. Mikiki / 土佐有明 — [原 摩利彦がTOWER RECORDS BEERに来店! ビールを味わいつつ映画「わたしの知らない子どもたち」や選盤したレコードを語る](https://mikiki.tokyo.jp/articles/-/45992), 2026-09-08.
+8. Time Out Tokyo / Emma Steen — [8 best listening bars in Tokyo for vinyl music](https://www.timeout.com/tokyo/nightlife/top-music-bars-in-tokyo), 2024-06-27.
+9. Resident Advisor / Aaron Coultate — [Inside Tokyo's audiophile venues](https://ra.co/features/2724), 2016-10-19.
+10. Travel Japan / JNTO — [Shibuya & Shimokitazawa](https://www.japan.travel/en/destinations/kanto/tokyo/shibuya-and-shimokitazawa/), official destination guide.

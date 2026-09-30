@@ -12,6 +12,7 @@ class CuratedArticle {
     required this.tagsEn,
     required this.url,
     this.featured = false,
+    this.visitorPick = false,
   });
 
   final String id;
@@ -26,6 +27,7 @@ class CuratedArticle {
   final List<String> tagsEn;
   final Uri url;
   final bool featured;
+  final bool visitorPick;
 
   String titleFor(String languageCode) =>
       languageCode == 'ja' ? titleJa : titleEn;

@@ -35,7 +35,12 @@ class ReadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final copy = AppLocalizations.of(context);
     final featured = curatedArticles.firstWhere((article) => article.featured);
-    final rest = curatedArticles.where((article) => !article.featured).toList();
+    final visitorArticles =
+        curatedArticles.where((article) => article.visitorPick).toList();
+    final rest =
+        curatedArticles
+            .where((article) => !article.featured && !article.visitorPick)
+            .toList();
     return CustomScrollView(
       key: const PageStorageKey('reading'),
       slivers: [
@@ -56,6 +61,7 @@ class ReadingScreen extends StatelessWidget {
         SliverToBoxAdapter(
           child: _ReadingBody(
             featured: featured,
+            visitorArticles: visitorArticles,
             articles: rest,
             onOpen: (article) => _openArticle(context, article),
           ),
@@ -145,11 +151,13 @@ class _ReadingIntro extends StatelessWidget {
 class _ReadingBody extends StatelessWidget {
   const _ReadingBody({
     required this.featured,
+    required this.visitorArticles,
     required this.articles,
     required this.onOpen,
   });
 
   final CuratedArticle featured;
+  final List<CuratedArticle> visitorArticles;
   final List<CuratedArticle> articles;
   final ValueChanged<CuratedArticle> onOpen;
 
@@ -173,28 +181,18 @@ class _ReadingBody extends StatelessWidget {
               const SizedBox(height: SideBSpacing.md),
               _FeaturedArticle(article: featured, onOpen: onOpen),
               const SizedBox(height: SideBSpacing.xxl),
-              _SectionLabel(number: '02', label: copy.t('readShelf')),
-              const SizedBox(height: SideBSpacing.md),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final columns = constraints.maxWidth >= 760 ? 2 : 1;
-                  final cardWidth =
-                      columns == 2
-                          ? (constraints.maxWidth - SideBSpacing.lg) / 2
-                          : constraints.maxWidth;
-                  return Wrap(
-                    spacing: SideBSpacing.lg,
-                    runSpacing: SideBSpacing.lg,
-                    children: [
-                      for (final article in articles)
-                        SizedBox(
-                          width: cardWidth,
-                          child: _ArticleCard(article: article, onOpen: onOpen),
-                        ),
-                    ],
-                  );
-                },
+              _SectionLabel(number: '02', label: copy.t('readVisitor')),
+              const SizedBox(height: SideBSpacing.sm),
+              Text(
+                copy.t('readVisitorBody'),
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
+              const SizedBox(height: SideBSpacing.md),
+              _ArticleGrid(articles: visitorArticles, onOpen: onOpen),
+              const SizedBox(height: SideBSpacing.xxl),
+              _SectionLabel(number: '03', label: copy.t('readShelf')),
+              const SizedBox(height: SideBSpacing.md),
+              _ArticleGrid(articles: articles, onOpen: onOpen),
               const SizedBox(height: SideBSpacing.xl),
               DecoratedBox(
                 decoration: BoxDecoration(
@@ -229,6 +227,35 @@ class _ReadingBody extends StatelessWidget {
   }
 }
 
+class _ArticleGrid extends StatelessWidget {
+  const _ArticleGrid({required this.articles, required this.onOpen});
+
+  final List<CuratedArticle> articles;
+  final ValueChanged<CuratedArticle> onOpen;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final columns = constraints.maxWidth >= 760 ? 2 : 1;
+      final cardWidth =
+          columns == 2
+              ? (constraints.maxWidth - SideBSpacing.lg) / 2
+              : constraints.maxWidth;
+      return Wrap(
+        spacing: SideBSpacing.lg,
+        runSpacing: SideBSpacing.lg,
+        children: [
+          for (final article in articles)
+            SizedBox(
+              width: cardWidth,
+              child: _ArticleCard(article: article, onOpen: onOpen),
+            ),
+        ],
+      );
+    },
+  );
+}
+
 class _SectionLabel extends StatelessWidget {
   const _SectionLabel({required this.number, required this.label});
   final String number;
@@ -246,7 +273,14 @@ class _SectionLabel extends StatelessWidget {
       const SizedBox(width: SideBSpacing.md),
       Expanded(child: Divider(color: Theme.of(context).colorScheme.outline)),
       const SizedBox(width: SideBSpacing.md),
-      Text(label, style: Theme.of(context).textTheme.labelLarge),
+      Flexible(
+        flex: 3,
+        child: Text(
+          label,
+          textAlign: TextAlign.right,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
+      ),
     ],
   );
 }

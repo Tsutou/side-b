@@ -88,9 +88,15 @@ void main() {
     expect(find.text('東京の音を、\n読む。'), findsOneWidget);
     expect(find.text('NOTE'), findsNWidgets(2));
     expect(find.text('ARBAN'), findsNWidgets(2));
-    expect(find.text('RESIDENT ADVISOR'), findsOneWidget);
+    expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
+    expect(find.text('RESIDENT ADVISOR'), findsNWidgets(2));
+    expect(find.text('TRAVEL JAPAN / JNTO'), findsOneWidget);
     expect(
       find.byKey(const ValueKey('read-shimokitazawa-cafe-hop')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('read-timeout-listening-bars')),
       findsOneWidget,
     );
   });
@@ -194,7 +200,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Read the sound\nof Tokyo.'), findsOneWidget);
     expect(find.text('Map'), findsOneWidget);
-    expect(find.text('RESIDENT ADVISOR'), findsOneWidget);
+    expect(find.text('VISITOR’S VIEW'), findsOneWidget);
+    expect(find.text('RESIDENT ADVISOR'), findsNWidgets(2));
     final title = tester.widget<Text>(find.text('Read the sound\nof Tokyo.'));
     expect(title.style?.fontFamily, 'Futura');
     final brand = tester.widget<Text>(find.text('SIDE B'));

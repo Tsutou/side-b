@@ -72,6 +72,7 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['八王子', '音響', '映像'],
     tagsEn: ['Hachioji', 'Sound', 'Film'],
     url: Uri.parse('https://ra.co/features/3496'),
+    visitorPick: true,
   ),
   CuratedArticle(
     id: 'lady-jane',
@@ -102,5 +103,54 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['渋谷', '選盤', '新しい店'],
     tagsEn: ['Shibuya', 'Selection', 'New opening'],
     url: Uri.parse('https://mikiki.tokyo.jp/articles/-/45992'),
+  ),
+  CuratedArticle(
+    id: 'timeout-listening-bars',
+    source: 'Time Out Tokyo',
+    author: 'Emma Steen',
+    dateLabel: '2024.06.27',
+    titleJa: '東京で訪れたい、レコードを聴くための8軒',
+    titleEn: '8 best listening bars in Tokyo for vinyl music',
+    noteJa: '「リスニングバーとは？」から始めて、8軒を案内。チャージと現金払いの情報もある。旅の一晩を組み立てやすい。',
+    noteEn:
+        'An accessible introduction to eight listening bars, with practical details—from cover charges to cash-only counters—that help plan a night out.',
+    tagsJa: ['英語', '8軒', '旅の計画'],
+    tagsEn: ['English', '8 places', 'Plan a night'],
+    url: Uri.parse(
+      'https://www.timeout.com/tokyo/nightlife/top-music-bars-in-tokyo',
+    ),
+    visitorPick: true,
+  ),
+  CuratedArticle(
+    id: 'ra-audiophile-venues',
+    source: 'Resident Advisor',
+    author: 'Aaron Coultate',
+    dateLabel: '2016.10.19',
+    titleJa: '海外の音楽メディアが歩いた、東京のオーディオ名店',
+    titleEn: 'Inside Tokyo’s audiophile venues',
+    noteJa: '東京の小さな店と巨大なスピーカーが外からどう見えるのか、海外の音楽好きがこの文化に惹かれる理由をたどる長編。',
+    noteEn:
+        'A deep look at the small rooms and outsized sound systems that made Tokyo’s listening culture a destination for music lovers abroad.',
+    tagsJa: ['英語', '音響', 'ロングリード'],
+    tagsEn: ['English', 'Audiophile', 'Long read'],
+    url: Uri.parse('https://ra.co/features/2724'),
+    visitorPick: true,
+  ),
+  CuratedArticle(
+    id: 'jnto-shibuya-shimokitazawa',
+    source: 'Travel Japan / JNTO',
+    author: 'JNTO',
+    dateLabel: 'OFFICIAL GUIDE',
+    titleJa: '渋谷と下北沢——新しい東京とレトロな東京を歩く',
+    titleEn: 'Shibuya & Shimokitazawa: the ultramodern and the retro',
+    noteJa: '渋谷と下北沢を一本の街歩きとして捉える公式ガイド。レコード店、ライブハウス、交通をまとめて把握したい旅行者向け。',
+    noteEn:
+        'An official neighborhood primer connecting record shops, live venues, and transport across two essential stops for a music-led Tokyo trip.',
+    tagsJa: ['英語', '公式', '街歩き'],
+    tagsEn: ['English', 'Official', 'Neighborhoods'],
+    url: Uri.parse(
+      'https://www.japan.travel/en/destinations/kanto/tokyo/shibuya-and-shimokitazawa/',
+    ),
+    visitorPick: true,
   ),
 ];
