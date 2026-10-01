@@ -9,6 +9,8 @@ enum ArticleFacet {
   practical,
 }
 
+enum ArticleThumbnailKind { socialPreview, aiGenerated }
+
 class CuratedArticle {
   const CuratedArticle({
     required this.id,
@@ -23,6 +25,7 @@ class CuratedArticle {
     required this.tagsEn,
     required this.url,
     required this.facets,
+    this.thumbnailKind = ArticleThumbnailKind.socialPreview,
     this.featured = false,
     this.visitorPick = false,
   });
@@ -39,8 +42,11 @@ class CuratedArticle {
   final List<String> tagsEn;
   final Uri url;
   final Set<ArticleFacet> facets;
+  final ArticleThumbnailKind thumbnailKind;
   final bool featured;
   final bool visitorPick;
+
+  String get thumbnailAsset => 'assets/images/articles/$id.jpg';
 
   String titleFor(String languageCode) =>
       languageCode == 'ja' ? titleJa : titleEn;

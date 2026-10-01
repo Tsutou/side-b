@@ -421,26 +421,9 @@ class _FeaturedArticle extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             final wide = constraints.maxWidth >= 720;
-            final number = Container(
-              width: wide ? 190 : double.infinity,
-              height: wide ? 190 : 112,
-              decoration: BoxDecoration(
-                color: SideBColors.vermilion,
-                borderRadius: BorderRadius.circular(SideBRadii.large),
-              ),
-              alignment: Alignment.bottomLeft,
-              padding: const EdgeInsets.all(SideBSpacing.lg),
-              child: const Text(
-                '33⅓',
-                style: TextStyle(
-                  fontFamily: 'Futura',
-                  color: SideBColors.white,
-                  fontSize: 52,
-                  fontWeight: FontWeight.w700,
-                  height: .9,
-                  letterSpacing: -2,
-                ),
-              ),
+            final artwork = SizedBox(
+              width: wide ? 320 : double.infinity,
+              child: _ArticleThumbnail(article: article, featured: true),
             );
             final content = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -482,7 +465,7 @@ class _FeaturedArticle extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  number,
+                  artwork,
                   const SizedBox(height: SideBSpacing.lg),
                   content,
                 ],
@@ -491,7 +474,7 @@ class _FeaturedArticle extends StatelessWidget {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                number,
+                artwork,
                 const SizedBox(width: SideBSpacing.xl),
                 Expanded(child: content),
               ],
@@ -513,42 +496,193 @@ class _ArticleCard extends StatelessWidget {
     final copy = AppLocalizations.of(context);
     final languageCode = copy.locale.languageCode;
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(SideBSpacing.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _ArticleMeta(article: article),
-            const SizedBox(height: SideBSpacing.md),
-            Text(
-              article.titleFor(languageCode),
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontSize: 20, height: 1.3),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _ArticleThumbnail(article: article),
+          Padding(
+            padding: const EdgeInsets.all(SideBSpacing.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _ArticleMeta(article: article),
+                const SizedBox(height: SideBSpacing.md),
+                Text(
+                  article.titleFor(languageCode),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontSize: 20, height: 1.3),
+                ),
+                const SizedBox(height: SideBSpacing.sm),
+                Text(
+                  article.noteFor(languageCode),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: SideBSpacing.md),
+                _Tags(article: article),
+                const SizedBox(height: SideBSpacing.sm),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    key: ValueKey('read-${article.id}'),
+                    onPressed: () => onOpen(article),
+                    iconAlignment: IconAlignment.end,
+                    icon: const Icon(Icons.north_east, size: 18),
+                    label: Text(copy.t('readArticle')),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: SideBSpacing.sm),
-            Text(
-              article.noteFor(languageCode),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: SideBSpacing.md),
-            _Tags(article: article),
-            const SizedBox(height: SideBSpacing.sm),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton.icon(
-                key: ValueKey('read-${article.id}'),
-                onPressed: () => onOpen(article),
-                iconAlignment: IconAlignment.end,
-                icon: const Icon(Icons.north_east, size: 18),
-                label: Text(copy.t('readArticle')),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ArticleThumbnail extends StatelessWidget {
+  const _ArticleThumbnail({required this.article, this.featured = false});
+
+  final CuratedArticle article;
+  final bool featured;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExcludeSemantics(
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(SideBRadii.medium),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                article.thumbnailAsset,
+                key: ValueKey('read-thumbnail-${article.id}'),
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.medium,
+                errorBuilder:
+                    (context, error, stackTrace) =>
+                        const _AiThumbnailFallback(),
               ),
-            ),
-          ],
+              ColoredBox(color: SideBColors.midnight.withValues(alpha: .14)),
+              Positioned(
+                left: SideBSpacing.md,
+                right: SideBSpacing.md,
+                bottom: SideBSpacing.md,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: SideBColors.midnight.withValues(alpha: .86),
+                            borderRadius: BorderRadius.circular(
+                              SideBRadii.round,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: SideBSpacing.sm,
+                              vertical: SideBSpacing.xs,
+                            ),
+                            child: Text(
+                              article.source.toUpperCase(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(
+                                context,
+                              ).textTheme.labelSmall?.copyWith(
+                                color: SideBColors.white,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: .8,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (featured) ...[
+                      const SizedBox(width: SideBSpacing.sm),
+                      const Text(
+                        '33⅓',
+                        style: TextStyle(
+                          fontFamily: 'Futura',
+                          color: SideBColors.albumYellow,
+                          fontSize: 38,
+                          fontWeight: FontWeight.w700,
+                          height: .9,
+                          letterSpacing: -1.5,
+                          shadows: [
+                            Shadow(color: SideBColors.midnight, blurRadius: 8),
+                          ],
+                        ),
+                      ),
+                    ],
+                    if (article.thumbnailKind ==
+                        ArticleThumbnailKind.aiGenerated) ...[
+                      const SizedBox(width: SideBSpacing.sm),
+                      const _AiImageBadge(),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+class _AiThumbnailFallback extends StatelessWidget {
+  const _AiThumbnailFallback();
+
+  @override
+  Widget build(BuildContext context) => Stack(
+    fit: StackFit.expand,
+    children: [
+      Image.asset(
+        'assets/images/articles/ai-fallback.jpg',
+        fit: BoxFit.cover,
+        filterQuality: FilterQuality.medium,
+      ),
+      const Positioned(
+        top: SideBSpacing.sm,
+        right: SideBSpacing.sm,
+        child: _AiImageBadge(),
+      ),
+    ],
+  );
+}
+
+class _AiImageBadge extends StatelessWidget {
+  const _AiImageBadge();
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      color: SideBColors.albumYellow,
+      borderRadius: BorderRadius.circular(SideBRadii.round),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: SideBSpacing.sm,
+        vertical: SideBSpacing.xs,
+      ),
+      child: Text(
+        'AI VISUAL',
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          color: SideBColors.ink,
+          fontWeight: FontWeight.w800,
+          letterSpacing: .6,
+        ),
+      ),
+    ),
+  );
 }
 
 class _ArticleMeta extends StatelessWidget {

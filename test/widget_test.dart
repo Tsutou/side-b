@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:image/image.dart' as img;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:side_b/app/side_b_app.dart';
 import 'package:side_b/core/design/tokens.dart';
+import 'package:side_b/features/reading/data/curated_articles.dart';
 import 'package:side_b/features/saved/application/saved_venues_controller.dart';
 import 'package:side_b/features/venues/data/mock_venues.dart';
 
@@ -28,6 +31,21 @@ void main() {
     expect(mapsUri.host, 'www.google.com');
     expect(mapsUri.queryParameters['api'], '1');
     expect(mapsUri.queryParameters['query'], '神保町 東京 ミュージックバー');
+  });
+
+  test('ships normalized thumbnails for every curated article', () async {
+    final assets = [
+      for (final article in curatedArticles) article.thumbnailAsset,
+      'assets/images/articles/ai-fallback.jpg',
+    ];
+    for (final asset in assets) {
+      final data = await rootBundle.load(asset);
+      final thumbnail = img.decodeImage(data.buffer.asUint8List());
+
+      expect(thumbnail, isNotNull, reason: asset);
+      expect(thumbnail!.width, 1200, reason: asset);
+      expect(thumbnail.height, 675, reason: asset);
+    }
   });
 
   testWidgets('opens on the map-first shell', (tester) async {
@@ -88,11 +106,11 @@ void main() {
     await openJapaneseReading(tester);
 
     expect(find.text('東京の音を、\n読む。'), findsOneWidget);
-    expect(find.text('NOTE'), findsNWidgets(2));
-    expect(find.text('ARBAN'), findsNWidgets(2));
+    expect(find.text('NOTE'), findsAtLeastNWidgets(2));
+    expect(find.text('ARBAN'), findsAtLeastNWidgets(2));
     expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
-    expect(find.text('RESIDENT ADVISOR'), findsNWidgets(2));
-    expect(find.text('TRAVEL JAPAN / JNTO'), findsOneWidget);
+    expect(find.text('RESIDENT ADVISOR'), findsAtLeastNWidgets(2));
+    expect(find.text('TRAVEL JAPAN / JNTO'), findsWidgets);
     expect(
       find.byKey(const ValueKey('read-shimokitazawa-cafe-hop')),
       findsOneWidget,
@@ -102,6 +120,10 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('10本'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('read-thumbnail-shimokitazawa-cafe-hop')),
+      findsOneWidget,
+    );
     expect(find.text('すべて'), findsOneWidget);
     expect(
       find.byKey(const ValueKey('reading-filter-english')),
@@ -244,7 +266,7 @@ void main() {
     expect(find.text('Read the sound\nof Tokyo.'), findsOneWidget);
     expect(find.text('Map'), findsOneWidget);
     expect(find.text('VISITOR’S VIEW'), findsOneWidget);
-    expect(find.text('RESIDENT ADVISOR'), findsNWidgets(2));
+    expect(find.text('RESIDENT ADVISOR'), findsAtLeastNWidgets(2));
     final title = tester.widget<Text>(find.text('Read the sound\nof Tokyo.'));
     expect(title.style?.fontFamily, 'Futura');
     final brand = tester.widget<Text>(find.text('SIDE B'));

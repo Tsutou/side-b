@@ -10,12 +10,19 @@ Each article has one language facet and one or more editorial-angle facets. The 
 
 ## Publication rules
 
-- Link to the original publisher. Do not copy article bodies or reuse publisher images.
+- Link to the original publisher. Do not copy article bodies or use publisher images outside the page's declared social preview.
+- Use only the page's declared Open Graph or Twitter Card image as its linked preview. Cache a compressed derivative for performance, retain a visible publisher label, and remove it if the publisher changes the preview or requests removal.
 - Show the publisher, author, publication date, and update date when one is supplied.
 - Write a short SIDE B note that explains why the piece is worth the reader's time. Do not disguise a summary as reporting.
 - Check every link and its metadata before release. Recheck the shelf quarterly and remove dead, substantially changed, or misleading entries.
 - Keep editorial links separate from verified venue facts. An article can provide context, but it does not by itself verify current opening hours, prices, or accessibility.
 - Prefer a small, varied shelf over a feed. Seven considered links are more useful than an automated stream of loosely related posts.
+
+## Thumbnail refresh
+
+Run `dart run tool/refresh_article_thumbnails.dart` after changing the shelf. The script reads each publisher's current social-image metadata, requires a reasonable source resolution, and writes a 1200×675 JPEG with consistent crop, saturation, contrast, and compression. A failed or undersized source stops the refresh so it can be reviewed rather than silently shipping a poor preview.
+
+If a page has no usable social preview, generate an original SIDE B editorial image from the article's verified subject and facets only. Do not imitate a named artist, reproduce the article's photography, or invent a venue interior. Normalize it with `dart run tool/refresh_article_thumbnails.dart --normalize-ai <source-image> <article-id>`, set `thumbnailKind` to `ArticleThumbnailKind.aiGenerated`, and keep the visible `AI VISUAL` label. The shared `ai-fallback.jpg` is only the last-resort runtime fallback for a missing asset.
 
 ## Prototype shelf
 

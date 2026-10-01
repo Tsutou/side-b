@@ -12,6 +12,10 @@ Each change should move through a small evidence-based loop:
 
 The Pages workflow enforces formatting, static analysis, widget tests, a release build, and the presence of SEO discovery files before deployment.
 
+The curated reading shelf also has a deterministic media step. `dart run tool/refresh_article_thumbnails.dart` fetches only declared social-preview images, validates their size, and produces local 1200×675 JPEGs. Tests require one normalized asset for every article, so adding a story without completing its preview cannot pass release QA.
+
+For articles without a usable social preview, `--normalize-ai <source-image> <article-id>` applies the same output contract to an original generated image. The article record must declare `ArticleThumbnailKind.aiGenerated`; the UI then discloses the source as `AI VISUAL`. A shared generated fallback prevents a broken image frame if an asset is unexpectedly unavailable at runtime.
+
 ## Intended vs. implemented review — 2026-09-29
 
 | Intent | Implementation evidence | Status |
