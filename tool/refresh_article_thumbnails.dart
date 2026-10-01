@@ -202,12 +202,43 @@ img.Image _normalize(img.Image source) {
     width: _targetWidth,
     height: _targetHeight,
   );
-  return img.adjustColor(
+  var luminanceTotal = 0.0;
+  for (final pixel in cropped) {
+    luminanceTotal +=
+        .2126 * pixel.rNormalized +
+        .7152 * pixel.gNormalized +
+        .0722 * pixel.bNormalized;
+  }
+  final averageLuminance = luminanceTotal / (cropped.width * cropped.height);
+  final brightness = (0.48 / averageLuminance).clamp(.88, 1.12);
+  final graded = img.adjustColor(
     cropped,
-    saturation: .72,
-    contrast: 1.08,
-    brightness: .94,
+    saturation: .58,
+    contrast: 1.1,
+    brightness: brightness,
   );
+
+  for (final pixel in graded) {
+    final luminance =
+        .2126 * pixel.rNormalized +
+        .7152 * pixel.gNormalized +
+        .0722 * pixel.bNormalized;
+    final paperR = .07 + .84 * luminance;
+    final paperG = .07 + .75 * luminance;
+    final paperB = .09 + .58 * luminance;
+    final grain =
+        (((pixel.x * 13 + pixel.y * 7 + (pixel.x * pixel.y) % 17) % 19) - 9) /
+        1100;
+    const inkMix = .14;
+    final red = (pixel.rNormalized * (1 - inkMix) + paperR * inkMix + grain)
+        .clamp(0.0, 1.0);
+    final green = (pixel.gNormalized * (1 - inkMix) + paperG * inkMix + grain)
+        .clamp(0.0, 1.0);
+    final blue = (pixel.bNormalized * (1 - inkMix) + paperB * inkMix + grain)
+        .clamp(0.0, 1.0);
+    pixel.setRgba(red * 255, green * 255, blue * 255, pixel.a);
+  }
+  return graded;
 }
 
 String _decodeHtml(String value) => value

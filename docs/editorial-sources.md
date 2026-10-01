@@ -20,7 +20,7 @@ Each article has one language facet and one or more editorial-angle facets. The 
 
 ## Thumbnail refresh
 
-Run `dart run tool/refresh_article_thumbnails.dart` after changing the shelf. The script reads each publisher's current social-image metadata, requires a reasonable source resolution, and writes a 1200×675 JPEG with consistent crop, saturation, contrast, and compression. A failed or undersized source stops the refresh so it can be reviewed rather than silently shipping a poor preview.
+Run `dart run tool/refresh_article_thumbnails.dart` after changing the shelf. The script reads each publisher's current social-image metadata, requires a reasonable source resolution, and writes a 1200×675 JPEG with consistent crop and compression. Its deterministic print grade normalizes midtone brightness before applying restrained saturation, warm shadow/highlight separation, and subtle paper grain. A failed or undersized source stops the refresh so it can be reviewed rather than silently shipping a poor preview.
 
 If a page has no usable social preview, generate an original SIDE B editorial image from the article's verified subject and facets only. Do not imitate a named artist, reproduce the article's photography, or invent a venue interior. Normalize it with `dart run tool/refresh_article_thumbnails.dart --normalize-ai <source-image> <article-id>`, set `thumbnailKind` to `ArticleThumbnailKind.aiGenerated`, and keep the visible `AI VISUAL` label. The shared `ai-fallback.jpg` is only the last-resort runtime fallback for a missing asset.
 
