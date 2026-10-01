@@ -23,17 +23,11 @@ class ReadingScreen extends StatefulWidget {
 class _ReadingScreenState extends State<ReadingScreen> {
   ArticleFacet _facet = ArticleFacet.all;
 
-  Future<void> _openArticle(
-    BuildContext context,
-    CuratedArticle article,
-  ) async {
-    final opened = await launchUrl(
-      article.url,
-      mode: LaunchMode.externalApplication,
-    );
+  Future<void> _openUri(BuildContext context, Uri uri, String errorKey) async {
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!opened && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).t('readError'))),
+        SnackBar(content: Text(AppLocalizations.of(context).t(errorKey))),
       );
     }
   }
@@ -80,7 +74,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
             showFeatured: featured.matches(_facet),
             visitorArticles: visitorArticles,
             articles: rest,
-            onOpen: (article) => _openArticle(context, article),
+            onRead: (article) => _openUri(context, article.url, 'readError'),
+            onOpenMaps:
+                (article) =>
+                    _openUri(context, article.googleMapsUri, 'readMapsError'),
           ),
         ),
       ],
@@ -255,14 +252,16 @@ class _ReadingBody extends StatelessWidget {
     required this.showFeatured,
     required this.visitorArticles,
     required this.articles,
-    required this.onOpen,
+    required this.onRead,
+    required this.onOpenMaps,
   });
 
   final CuratedArticle featured;
   final bool showFeatured;
   final List<CuratedArticle> visitorArticles;
   final List<CuratedArticle> articles;
-  final ValueChanged<CuratedArticle> onOpen;
+  final ValueChanged<CuratedArticle> onRead;
+  final ValueChanged<CuratedArticle> onOpenMaps;
 
   @override
   Widget build(BuildContext context) {
@@ -283,7 +282,11 @@ class _ReadingBody extends StatelessWidget {
               if (showFeatured) ...[
                 _SectionLabel(number: '01', label: copy.t('readFeatured')),
                 const SizedBox(height: SideBSpacing.md),
-                _FeaturedArticle(article: featured, onOpen: onOpen),
+                _FeaturedArticle(
+                  article: featured,
+                  onRead: onRead,
+                  onOpenMaps: onOpenMaps,
+                ),
                 const SizedBox(height: SideBSpacing.xxl),
               ],
               if (visitorArticles.isNotEmpty) ...[
@@ -294,13 +297,21 @@ class _ReadingBody extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: SideBSpacing.md),
-                _ArticleGrid(articles: visitorArticles, onOpen: onOpen),
+                _ArticleGrid(
+                  articles: visitorArticles,
+                  onRead: onRead,
+                  onOpenMaps: onOpenMaps,
+                ),
                 const SizedBox(height: SideBSpacing.xxl),
               ],
               if (articles.isNotEmpty) ...[
                 _SectionLabel(number: '03', label: copy.t('readShelf')),
                 const SizedBox(height: SideBSpacing.md),
-                _ArticleGrid(articles: articles, onOpen: onOpen),
+                _ArticleGrid(
+                  articles: articles,
+                  onRead: onRead,
+                  onOpenMaps: onOpenMaps,
+                ),
               ],
               if (!showFeatured && visitorArticles.isEmpty && articles.isEmpty)
                 Padding(
@@ -348,10 +359,15 @@ class _ReadingBody extends StatelessWidget {
 }
 
 class _ArticleGrid extends StatelessWidget {
-  const _ArticleGrid({required this.articles, required this.onOpen});
+  const _ArticleGrid({
+    required this.articles,
+    required this.onRead,
+    required this.onOpenMaps,
+  });
 
   final List<CuratedArticle> articles;
-  final ValueChanged<CuratedArticle> onOpen;
+  final ValueChanged<CuratedArticle> onRead;
+  final ValueChanged<CuratedArticle> onOpenMaps;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -368,7 +384,11 @@ class _ArticleGrid extends StatelessWidget {
           for (final article in articles)
             SizedBox(
               width: cardWidth,
-              child: _ArticleCard(article: article, onOpen: onOpen),
+              child: _ArticleCard(
+                article: article,
+                onRead: onRead,
+                onOpenMaps: onOpenMaps,
+              ),
             ),
         ],
       );
@@ -406,9 +426,14 @@ class _SectionLabel extends StatelessWidget {
 }
 
 class _FeaturedArticle extends StatelessWidget {
-  const _FeaturedArticle({required this.article, required this.onOpen});
+  const _FeaturedArticle({
+    required this.article,
+    required this.onRead,
+    required this.onOpenMaps,
+  });
   final CuratedArticle article;
-  final ValueChanged<CuratedArticle> onOpen;
+  final ValueChanged<CuratedArticle> onRead;
+  final ValueChanged<CuratedArticle> onOpenMaps;
 
   @override
   Widget build(BuildContext context) {
@@ -449,15 +474,31 @@ class _FeaturedArticle extends StatelessWidget {
                 const SizedBox(height: SideBSpacing.lg),
                 _Tags(article: article, onDark: true),
                 const SizedBox(height: SideBSpacing.lg),
-                FilledButton.icon(
-                  key: ValueKey('read-${article.id}'),
-                  onPressed: () => onOpen(article),
-                  icon: const Icon(Icons.north_east),
-                  label: Text(copy.t('readArticle')),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: SideBColors.albumYellow,
-                    foregroundColor: SideBColors.ink,
-                  ),
+                Wrap(
+                  spacing: SideBSpacing.sm,
+                  runSpacing: SideBSpacing.sm,
+                  children: [
+                    FilledButton.icon(
+                      key: ValueKey('maps-${article.id}'),
+                      onPressed: () => onOpenMaps(article),
+                      icon: const Icon(Icons.map_outlined),
+                      label: Text(copy.t('readMaps')),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: SideBColors.albumYellow,
+                        foregroundColor: SideBColors.ink,
+                      ),
+                    ),
+                    OutlinedButton.icon(
+                      key: ValueKey('read-${article.id}'),
+                      onPressed: () => onRead(article),
+                      icon: const Icon(Icons.north_east),
+                      label: Text(copy.t('readArticle')),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: SideBColors.ivory,
+                        side: const BorderSide(color: SideBColors.ivory),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             );
@@ -487,9 +528,14 @@ class _FeaturedArticle extends StatelessWidget {
 }
 
 class _ArticleCard extends StatelessWidget {
-  const _ArticleCard({required this.article, required this.onOpen});
+  const _ArticleCard({
+    required this.article,
+    required this.onRead,
+    required this.onOpenMaps,
+  });
   final CuratedArticle article;
-  final ValueChanged<CuratedArticle> onOpen;
+  final ValueChanged<CuratedArticle> onRead;
+  final ValueChanged<CuratedArticle> onOpenMaps;
 
   @override
   Widget build(BuildContext context) {
@@ -522,15 +568,25 @@ class _ArticleCard extends StatelessWidget {
                 const SizedBox(height: SideBSpacing.md),
                 _Tags(article: article),
                 const SizedBox(height: SideBSpacing.sm),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton.icon(
-                    key: ValueKey('read-${article.id}'),
-                    onPressed: () => onOpen(article),
-                    iconAlignment: IconAlignment.end,
-                    icon: const Icon(Icons.north_east, size: 18),
-                    label: Text(copy.t('readArticle')),
-                  ),
+                Wrap(
+                  alignment: WrapAlignment.end,
+                  spacing: SideBSpacing.xs,
+                  runSpacing: SideBSpacing.xs,
+                  children: [
+                    FilledButton.tonalIcon(
+                      key: ValueKey('maps-${article.id}'),
+                      onPressed: () => onOpenMaps(article),
+                      icon: const Icon(Icons.map_outlined, size: 18),
+                      label: Text(copy.t('readMaps')),
+                    ),
+                    TextButton.icon(
+                      key: ValueKey('read-${article.id}'),
+                      onPressed: () => onRead(article),
+                      iconAlignment: IconAlignment.end,
+                      icon: const Icon(Icons.north_east, size: 18),
+                      label: Text(copy.t('readArticle')),
+                    ),
+                  ],
                 ),
               ],
             ),

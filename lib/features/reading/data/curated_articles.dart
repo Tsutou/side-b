@@ -1,45 +1,9 @@
 import 'package:side_b/features/reading/domain/curated_article.dart';
 
+Uri _googleMapsSearch(String query) =>
+    Uri.https('www.google.com', '/maps/search/', {'api': '1', 'query': query});
+
 final curatedArticles = <CuratedArticle>[
-  CuratedArticle(
-    id: 'shimokitazawa-cafe-hop',
-    source: 'note',
-    author: '奥森皐月',
-    dateLabel: '2026.05.17',
-    titleJa: '梯子喫茶のすすめ｜マルディグラとジャズ喫茶マサコ【下北沢】',
-    titleEn: 'Café hopping in Shimokitazawa: Mardi Gras and Jazz Kissa Masako',
-    noteJa: '徒歩20秒の二軒をつなぐ、生活者の街歩き。音だけでなく、席や照明まで含めて店を好きになる過程が見える。',
-    noteEn:
-        'A local walk between two cafés just seconds apart, attentive to the seats, light, and small rituals that make a room memorable.',
-    tagsJa: ['下北沢', 'ジャズ喫茶', '街歩き'],
-    tagsEn: ['Shimokitazawa', 'Jazz kissa', 'Walk'],
-    url: Uri.parse('https://note.com/okumoris/n/n02c163278518'),
-    facets: {
-      ArticleFacet.japanese,
-      ArticleFacet.neighborhood,
-      ArticleFacet.sound,
-    },
-    featured: true,
-  ),
-  CuratedArticle(
-    id: 'tokyo-record-cafe-tour',
-    source: 'note',
-    author: 'keisuko',
-    dateLabel: '2026.05.28',
-    titleJa: '東京のレコードカフェやジャズ喫茶、ジャズレコード店巡りなど',
-    titleEn: 'A tour of Tokyo record cafés, jazz kissa, and record shops',
-    noteJa: '渋谷から御茶ノ水まで、初めてレコードのある店へ出かける人に近い目線で、一日の巡り方をたどれる。',
-    noteEn:
-        'A first-person route from Shibuya to Ochanomizu that makes record cafés and jazz kissa feel approachable to newcomers.',
-    tagsJa: ['渋谷', '御茶ノ水', 'レコード'],
-    tagsEn: ['Shibuya', 'Ochanomizu', 'Vinyl'],
-    url: Uri.parse('https://note.com/keisuko/n/nf2598a8f7e97'),
-    facets: {
-      ArticleFacet.japanese,
-      ArticleFacet.neighborhood,
-      ArticleFacet.practical,
-    },
-  ),
   CuratedArticle(
     id: 'tonlist',
     source: 'ARBAN',
@@ -54,7 +18,9 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['下北沢', '音響', '店主'],
     tagsEn: ['Shimokitazawa', 'Sound', 'Owner'],
     url: Uri.parse('https://www.arban-mag.com/article/76910'),
+    googleMapsUri: _googleMapsSearch('tonlist 下北沢 東京'),
     facets: {ArticleFacet.japanese, ArticleFacet.people, ArticleFacet.sound},
+    featured: true,
   ),
   CuratedArticle(
     id: 'music-bar-michi',
@@ -69,6 +35,7 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['湯島', 'シティポップ', '深夜'],
     tagsEn: ['Yushima', 'City pop', 'Late'],
     url: Uri.parse('https://www.timeout.jp/tokyo/ja/%E3%83%90%E3%83%BC/michi'),
+    googleMapsUri: _googleMapsSearch('ミュージックバー 道 湯島 東京'),
     facets: {ArticleFacet.japanese, ArticleFacet.practical, ArticleFacet.sound},
   ),
   CuratedArticle(
@@ -84,99 +51,8 @@ final curatedArticles = <CuratedArticle>[
     tagsJa: ['八王子', '音響', '映像'],
     tagsEn: ['Hachioji', 'Sound', 'Film'],
     url: Uri.parse('https://ra.co/features/3496'),
+    googleMapsUri: _googleMapsSearch('SHeLTeR 八王子 東京 リスニングバー'),
     facets: {ArticleFacet.english, ArticleFacet.sound, ArticleFacet.film},
-    visitorPick: true,
-  ),
-  CuratedArticle(
-    id: 'lady-jane',
-    source: 'ARBAN',
-    author: '富山英三郎',
-    dateLabel: '2017.03.23 / UPDATED 2020.11.25',
-    titleJa: '下北沢 LADY JANE——刺激的なライブが楽しめる、老舗ジャズバー',
-    titleEn:
-        'LADY JANE: an experimental jazz bar with roots in 1970s Shimokitazawa',
-    noteJa: '開店は1975年。音楽、映画、演劇が交わる。街と店が一緒に歳を重ねる姿を、店主の言葉から読む。',
-    noteEn:
-        'A history of a bar founded in 1975, told where music, film, and theatre meet—and where a venue grows old with its neighborhood.',
-    tagsJa: ['下北沢', 'ライブ', '老舗'],
-    tagsEn: ['Shimokitazawa', 'Live', 'History'],
-    url: Uri.parse('https://www.arban-mag.com/article/4977'),
-    facets: {
-      ArticleFacet.japanese,
-      ArticleFacet.people,
-      ArticleFacet.neighborhood,
-    },
-  ),
-  CuratedArticle(
-    id: 'tower-records-beer',
-    source: 'Mikiki',
-    author: '土佐有明',
-    dateLabel: '2026.09.08',
-    titleJa: '原 摩利彦がTOWER RECORDS BEERで語る、選盤と映画音楽',
-    titleEn:
-        'Marihiko Hara on record selection and film music at TOWER RECORDS BEER',
-    noteJa: 'レコードを買う場所と飲む場所が重なった、渋谷の新しい一角を訪ねる。原 摩利彦の選盤も読みどころ。',
-    noteEn:
-        'A composer selects records inside a new Shibuya bar, showing what changes when buying, listening, and drinking share one floor.',
-    tagsJa: ['渋谷', '選盤', '新しい店'],
-    tagsEn: ['Shibuya', 'Selection', 'New opening'],
-    url: Uri.parse('https://mikiki.tokyo.jp/articles/-/45992'),
-    facets: {ArticleFacet.japanese, ArticleFacet.people, ArticleFacet.sound},
-  ),
-  CuratedArticle(
-    id: 'timeout-listening-bars',
-    source: 'Time Out Tokyo',
-    author: 'Emma Steen',
-    dateLabel: '2024.06.27',
-    titleJa: '東京で訪れたい、レコードを聴くための8軒',
-    titleEn: '8 best listening bars in Tokyo for vinyl music',
-    noteJa: '「リスニングバーとは？」から始めて、8軒を案内。チャージと現金払いの情報もある。旅の一晩を組み立てやすい。',
-    noteEn:
-        'An accessible introduction to eight listening bars, with practical details—from cover charges to cash-only counters—that help plan a night out.',
-    tagsJa: ['英語', '8軒', '旅の計画'],
-    tagsEn: ['English', '8 places', 'Plan a night'],
-    url: Uri.parse(
-      'https://www.timeout.com/tokyo/nightlife/top-music-bars-in-tokyo',
-    ),
-    facets: {ArticleFacet.english, ArticleFacet.practical, ArticleFacet.sound},
-    visitorPick: true,
-  ),
-  CuratedArticle(
-    id: 'ra-audiophile-venues',
-    source: 'Resident Advisor',
-    author: 'Aaron Coultate',
-    dateLabel: '2016.10.19',
-    titleJa: '海外の音楽メディアが歩いた、東京のオーディオ名店',
-    titleEn: 'Inside Tokyo’s audiophile venues',
-    noteJa: '東京の小さな店と巨大なスピーカーが外からどう見えるのか、海外の音楽好きがこの文化に惹かれる理由をたどる長編。',
-    noteEn:
-        'A deep look at the small rooms and outsized sound systems that made Tokyo’s listening culture a destination for music lovers abroad.',
-    tagsJa: ['英語', '音響', 'ロングリード'],
-    tagsEn: ['English', 'Audiophile', 'Long read'],
-    url: Uri.parse('https://ra.co/features/2724'),
-    facets: {ArticleFacet.english, ArticleFacet.sound},
-    visitorPick: true,
-  ),
-  CuratedArticle(
-    id: 'jnto-shibuya-shimokitazawa',
-    source: 'Travel Japan / JNTO',
-    author: 'JNTO',
-    dateLabel: 'OFFICIAL GUIDE',
-    titleJa: '渋谷と下北沢——新しい東京とレトロな東京を歩く',
-    titleEn: 'Shibuya & Shimokitazawa: the ultramodern and the retro',
-    noteJa: '渋谷と下北沢を一本の街歩きとして捉える公式ガイド。レコード店、ライブハウス、交通をまとめて把握したい旅行者向け。',
-    noteEn:
-        'An official neighborhood primer connecting record shops, live venues, and transport across two essential stops for a music-led Tokyo trip.',
-    tagsJa: ['英語', '公式', '街歩き'],
-    tagsEn: ['English', 'Official', 'Neighborhoods'],
-    url: Uri.parse(
-      'https://www.japan.travel/en/destinations/kanto/tokyo/shibuya-and-shimokitazawa/',
-    ),
-    facets: {
-      ArticleFacet.english,
-      ArticleFacet.neighborhood,
-      ArticleFacet.practical,
-    },
     visitorPick: true,
   ),
 ];

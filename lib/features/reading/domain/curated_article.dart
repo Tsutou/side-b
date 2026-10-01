@@ -24,6 +24,7 @@ class CuratedArticle {
     required this.tagsJa,
     required this.tagsEn,
     required this.url,
+    required this.googleMapsUri,
     required this.facets,
     this.thumbnailKind = ArticleThumbnailKind.socialPreview,
     this.featured = false,
@@ -41,6 +42,7 @@ class CuratedArticle {
   final List<String> tagsJa;
   final List<String> tagsEn;
   final Uri url;
+  final Uri googleMapsUri;
   final Set<ArticleFacet> facets;
   final ArticleThumbnailKind thumbnailKind;
   final bool featured;

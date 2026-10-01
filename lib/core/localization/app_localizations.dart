@@ -92,10 +92,12 @@ class AppLocalizations {
       'readVisitor': 'VISITOR’S VIEW',
       'readVisitorBody':
           'English-language guides and long reads for seeing Tokyo’s listening culture from outside—and finding a way in.',
+      'readMaps': 'OPEN THE VENUE IN GOOGLE MAPS',
       'readArticle': 'READ THE ORIGINAL',
       'readDisclosure':
-          'Links open the original publishers. SIDE B adds only its own short editorial note; article text and images are not reproduced here.',
+          'Every story is tied to one identifiable venue. Google Maps searches open separately from the original publisher; SIDE B does not reproduce article text or images.',
       'readError': 'Could not open the article.',
+      'readMapsError': 'Could not open Google Maps.',
       'readFilterLabel': 'FILTER THE READING SHELF',
       'readFilterAll': 'All',
       'readFilterJapanese': 'Japanese',
@@ -179,9 +181,12 @@ class AppLocalizations {
       'readShelf': '読む棚から',
       'readVisitor': 'VISITOR’S VIEW / 海外から見る東京',
       'readVisitorBody': '英語の街案内とロングリードを、旅の計画と、海外から見た東京の音楽文化を知る手がかりに。',
+      'readMaps': '店をGoogle Mapsで見る',
       'readArticle': '元の記事を読む',
-      'readDisclosure': 'リンク先は各媒体のページです。SIDE Bは短い編集メモだけを加え、記事本文や画像は転載していません。',
+      'readDisclosure':
+          '掲載するのは、ひとつの実在店を特定できる記事だけです。Google Mapsの検索結果と元記事は別に開き、記事本文や画像は転載していません。',
       'readError': '記事を開けませんでした。',
+      'readMapsError': 'Google Mapsを開けませんでした。',
       'readFilterLabel': '読む棚を絞り込む',
       'readFilterAll': 'すべて',
       'readFilterJapanese': '日本語',

@@ -35,7 +35,7 @@ Future records must keep three sources visibly separate:
 
 Uncertain classifications stay in review. Google Maps must not be scraped; provider terms and attribution apply.
 
-The reading shelf follows the same separation rule. It links to the publisher rather than embedding, scraping, or republishing article text and images. A working source URL is not an endorsement: editors still review relevance, authorship, date, and whether the piece helps a reader understand a room, neighborhood, or listening practice.
+The reading shelf follows the same separation rule. Every published story must resolve to one identifiable, currently operating real venue and carry both the publisher URL and a reviewed Google Maps search URL. Roundups, neighborhood guides, temporary events, closed venues, and ambiguous subjects stay outside the shelf. SIDE B does not embed, scrape, or republish article text, images, or Google Maps data.
 
 ## Current prototype data
 

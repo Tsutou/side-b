@@ -106,22 +106,14 @@ void main() {
     await openJapaneseReading(tester);
 
     expect(find.text('東京の音を、\n読む。'), findsOneWidget);
-    expect(find.text('NOTE'), findsAtLeastNWidgets(2));
     expect(find.text('ARBAN'), findsAtLeastNWidgets(2));
     expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
     expect(find.text('RESIDENT ADVISOR'), findsAtLeastNWidgets(2));
-    expect(find.text('TRAVEL JAPAN / JNTO'), findsWidgets);
+    expect(find.byKey(const ValueKey('read-tonlist')), findsOneWidget);
+    expect(find.byKey(const ValueKey('read-shelter-film')), findsOneWidget);
+    expect(find.text('3本'), findsOneWidget);
     expect(
-      find.byKey(const ValueKey('read-shimokitazawa-cafe-hop')),
-      findsOneWidget,
-    );
-    expect(
-      find.byKey(const ValueKey('read-timeout-listening-bars')),
-      findsOneWidget,
-    );
-    expect(find.text('10本'), findsOneWidget);
-    expect(
-      find.byKey(const ValueKey('read-thumbnail-shimokitazawa-cafe-hop')),
+      find.byKey(const ValueKey('read-thumbnail-tonlist')),
       findsOneWidget,
     );
     expect(find.text('すべて'), findsOneWidget);
@@ -129,6 +121,25 @@ void main() {
       find.byKey(const ValueKey('reading-filter-english')),
       findsOneWidget,
     );
+  });
+
+  testWidgets('links every published story to its exact Google Maps search', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1280, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(SideBApp(savedVenues: SavedVenuesController()));
+    await tester.pumpAndSettle();
+    await openJapaneseReading(tester);
+
+    expect(curatedArticles, hasLength(3));
+    for (final article in curatedArticles) {
+      expect(article.googleMapsUri.host, 'www.google.com');
+      expect(article.googleMapsUri.path, '/maps/search/');
+      expect(article.googleMapsUri.queryParameters['api'], '1');
+      expect(article.googleMapsUri.queryParameters['query'], isNotEmpty);
+    }
+    expect(find.text('店をGoogle Mapsで見る'), findsWidgets);
   });
 
   testWidgets('filters the reading shelf with editorial bubbles', (
@@ -143,12 +154,9 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('reading-filter-english')));
     await tester.pumpAndSettle();
 
-    expect(find.text('4本'), findsOneWidget);
+    expect(find.text('1本'), findsOneWidget);
     expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
-    expect(
-      find.byKey(const ValueKey('read-timeout-listening-bars')),
-      findsOneWidget,
-    );
+    expect(find.byKey(const ValueKey('read-shelter-film')), findsOneWidget);
     expect(
       find.byKey(const ValueKey('read-tokyo-record-cafe-tour')),
       findsNothing,
@@ -158,10 +166,11 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('reading-filter-neighborhood')));
     await tester.pumpAndSettle();
 
-    expect(find.text('4本'), findsOneWidget);
-    expect(find.text('まず、この一本'), findsOneWidget);
-    expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
-    expect(find.text('読む棚から'), findsOneWidget);
+    expect(find.text('0本'), findsOneWidget);
+    expect(find.text('まず、この一本'), findsNothing);
+    expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsNothing);
+    expect(find.text('読む棚から'), findsNothing);
+    expect(find.text('この条件に合う記事はありません。'), findsOneWidget);
   });
 
   testWidgets('selects a venue from the editorial map', (tester) async {
