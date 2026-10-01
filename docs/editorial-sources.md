@@ -18,6 +18,18 @@ Each article has one language facet and one or more editorial-angle facets. The 
 - Require one identifiable, currently operating real venue and a reviewed Google Maps search URL. Skip roundups, neighborhood guides, temporary events, permanently closed venues, and stories whose subject cannot be resolved to one venue.
 - Treat the Google Maps link as a navigation handoff, not as verified venue data. Do not scrape Maps; use the documented search URL format and review the result manually.
 - Keep editorial links separate from verified venue facts. An article can provide context, but it does not by itself verify current opening hours, prices, or accessibility.
+
+### Agentic publication gate
+
+The weekly curator works article-first, but publishes venue-first:
+
+1. Find a credible article or blog post and extract its single primary venue name and area.
+2. Search Google Maps with that name and area before creating a shelf record.
+3. Continue only when the result identifies one operating venue whose name and area agree with the article.
+4. Skip the entire article when the venue is missing, ambiguous, closed, temporary, moved without a clear destination, or one of several subjects.
+5. Store the reviewed Maps search URL with the article, then complete copy, facets, and artwork.
+
+No article enters the published data first and waits for venue verification later. Existing records pass through the same gate again during every weekly review.
 - Prefer a small, varied shelf over a feed. Seven considered links are more useful than an automated stream of loosely related posts.
 
 ## Thumbnail refresh
