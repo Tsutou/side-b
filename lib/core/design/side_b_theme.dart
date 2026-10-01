@@ -3,7 +3,8 @@ import 'package:side_b/core/design/tokens.dart';
 
 abstract final class SideBTheme {
   static ThemeData light(Locale locale) {
-    final fontFamily = locale.languageCode == 'ja' ? 'NotoSansJP' : 'Futura';
+    final isJapanese = locale.languageCode == 'ja';
+    final fontFamily = isJapanese ? 'ZenKakuGothicNew' : 'Futura';
     final colorScheme = ColorScheme.fromSeed(
       seedColor: SideBColors.vermilion,
       brightness: Brightness.light,
@@ -44,43 +45,47 @@ abstract final class SideBTheme {
           fontFamily: fontFamily,
           fontWeight: FontWeight.w500,
           fontSize: 62,
-          height: .92,
-          letterSpacing: -2.4,
+          height: isJapanese ? 1.05 : .92,
+          letterSpacing: isJapanese ? -1 : -2.4,
           color: SideBColors.ink,
         ),
         displaySmall: TextStyle(
           fontFamily: fontFamily,
           fontWeight: FontWeight.w500,
           fontSize: 38,
-          height: 1.02,
-          letterSpacing: -1.2,
+          height: isJapanese ? 1.1 : 1.02,
+          letterSpacing: isJapanese ? -.4 : -1.2,
           color: SideBColors.ink,
         ),
         headlineMedium: TextStyle(
           fontFamily: fontFamily,
           fontWeight: FontWeight.w500,
           fontSize: 28,
-          height: 1.08,
-          letterSpacing: -.6,
+          height: isJapanese ? 1.18 : 1.08,
+          letterSpacing: isJapanese ? -.2 : -.6,
           color: SideBColors.ink,
         ),
-        titleLarge: const TextStyle(
+        titleLarge: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 18,
           height: 1.25,
           fontWeight: FontWeight.w700,
           color: SideBColors.ink,
         ),
-        bodyLarge: const TextStyle(
+        bodyLarge: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 17,
           height: 1.55,
           color: SideBColors.ink,
         ),
-        bodyMedium: const TextStyle(
+        bodyMedium: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 14,
           height: 1.5,
           color: SideBColors.inkSoft,
         ),
-        labelLarge: const TextStyle(
+        labelLarge: TextStyle(
+          fontFamily: fontFamily,
           fontSize: 12,
           height: 1.2,
           fontWeight: FontWeight.w700,

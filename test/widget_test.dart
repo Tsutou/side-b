@@ -307,7 +307,14 @@ void main() {
     await openJapaneseReading(tester);
 
     final title = tester.widget<Text>(find.text('東京の音を、\n読む。'));
+    final context = tester.element(find.byType(Scaffold).first);
+    final textTheme = Theme.of(context).textTheme;
 
+    expect(title.style?.fontFamily, 'ZenKakuGothicNew');
+    expect(textTheme.titleLarge?.fontFamily, 'ZenKakuGothicNew');
+    expect(textTheme.bodyLarge?.fontFamily, 'ZenKakuGothicNew');
+    expect(textTheme.bodyMedium?.fontFamily, 'ZenKakuGothicNew');
+    expect(textTheme.labelLarge?.fontFamily, 'ZenKakuGothicNew');
     expect(title.style?.fontSize, 52);
     expect(title.style?.height, 1.05);
     expect(title.style?.letterSpacing, -1);
