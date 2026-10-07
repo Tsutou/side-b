@@ -39,6 +39,22 @@ final curatedArticles = <CuratedArticle>[
     facets: {ArticleFacet.japanese, ArticleFacet.practical, ArticleFacet.sound},
   ),
   CuratedArticle(
+    id: 'yoshida-bakery',
+    source: 'ARBAN',
+    author: '富山英三郎',
+    dateLabel: '2026.08.28',
+    titleJa: '富士見ヶ丘 ヨシダベーカリー——パン屋が週一のレコードバーになる夜',
+    titleEn: 'Yoshida Bakery: when a Fujimigaoka bakery becomes a record bar',
+    noteJa: '真空管アンプと新旧のスピーカーが鳴るパン屋。店主のオーディオ遍歴と、定休日に開くレコードバーの成り立ちを聞く。',
+    noteEn:
+        'An owner interview on tube amps, vintage and modern speakers, and the off-hours record bar growing out of a neighborhood bakery.',
+    tagsJa: ['富士見ヶ丘', '音響', '店主'],
+    tagsEn: ['Fujimigaoka', 'Sound', 'Owner'],
+    url: Uri.parse('https://www.arban-mag.com/article/113666'),
+    googleMapsUri: _googleMapsSearch('ヨシダベーカリー 富士見ヶ丘 東京'),
+    facets: {ArticleFacet.japanese, ArticleFacet.people, ArticleFacet.sound},
+  ),
+  CuratedArticle(
     id: 'shelter-film',
     source: 'Resident Advisor',
     author: 'Resident Advisor',

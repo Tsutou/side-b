@@ -30,7 +30,7 @@ The weekly curator works article-first, but publishes venue-first:
 5. Store the reviewed Maps search URL with the article, then complete copy, facets, and artwork.
 
 No article enters the published data first and waits for venue verification later. Existing records pass through the same gate again during every weekly review.
-- Prefer a small, varied shelf over a feed. Seven considered links are more useful than an automated stream of loosely related posts.
+- Prefer a small, varied shelf over a feed. A considered set is more useful than an automated stream of loosely related posts.
 
 ## Thumbnail refresh
 
@@ -40,9 +40,10 @@ If a page has no usable social preview, generate an original SIDE B editorial im
 
 ## Prototype shelf
 
-Checked on 2026-10-01.
+Checked on 2026-10-07.
 
 1. ARBAN / 富山英三郎 — [【東京・下北沢／tonlist】ジャズ喫茶文化の音響面を色濃く継承する ホットドッグが美味しいお店](https://www.arban-mag.com/article/76910), 2023-04-28; updated 2026-05-22.
 2. Time Out Tokyo — [ミュージックバー 道](https://www.timeout.jp/tokyo/ja/%E3%83%90%E3%83%BC/michi), 2025-02-04.
-3. Resident Advisor — [Japan's Hidden Listening Bars: SHeLTeR](https://ra.co/features/3496), 2019-07-11.
+3. ARBAN / 富山英三郎 — [【東京・富士見ヶ丘 ヨシダベーカリー】レコードバーにも変身する美味しいベーカリー](https://www.arban-mag.com/article/113666), 2026-08-28.
+4. Resident Advisor — [Japan's Hidden Listening Bars: SHeLTeR](https://ra.co/features/3496), 2019-07-11.
 Stories about multiple venues, neighborhoods, temporary events, closed venues, or ambiguous destinations remain outside the published shelf. LADY JANE was removed after its reviewed Google Maps result reported the venue permanently closed.
