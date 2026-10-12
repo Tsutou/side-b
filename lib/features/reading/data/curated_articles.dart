@@ -55,6 +55,24 @@ final curatedArticles = <CuratedArticle>[
     facets: {ArticleFacet.japanese, ArticleFacet.people, ArticleFacet.sound},
   ),
   CuratedArticle(
+    id: 'judgment-records-lounge',
+    source: 'ARBAN',
+    author: '富山英三郎',
+    dateLabel: '2026.06.26',
+    titleJa: '西荻窪 JUDGMENT! RECORDS lounge——和ジャズをひらく音と酒の場所',
+    titleEn:
+        'JUDGMENT! RECORDS lounge: Japanese jazz, sound and drinks in Nishi-Ogikubo',
+    noteJa:
+        'アルテックのスピーカーと千枚のレコードを、時間帯や客の空気に合わせて鳴らす。和ジャズを広めてきた塙耕記が、若い客にも開かれた店をつくるまで。',
+    noteEn:
+        'Altec speakers, a thousand rotating records, and selections tuned to the room. An owner interview with Koki Hanawa on making Japanese jazz welcoming to new listeners.',
+    tagsJa: ['西荻窪', '和ジャズ', '音響'],
+    tagsEn: ['Nishi-Ogikubo', 'Japanese jazz', 'Sound'],
+    url: Uri.parse('https://www.arban-mag.com/article/113320'),
+    googleMapsUri: _googleMapsSearch('JUDGMENT! RECORDS lounge 西荻窪 東京'),
+    facets: {ArticleFacet.japanese, ArticleFacet.people, ArticleFacet.sound},
+  ),
+  CuratedArticle(
     id: 'shelter-film',
     source: 'Resident Advisor',
     author: 'Resident Advisor',

@@ -40,10 +40,11 @@ If a page has no usable social preview, generate an original SIDE B editorial im
 
 ## Prototype shelf
 
-Checked on 2026-10-07.
+Checked on 2026-10-12.
 
 1. ARBAN / 富山英三郎 — [【東京・下北沢／tonlist】ジャズ喫茶文化の音響面を色濃く継承する ホットドッグが美味しいお店](https://www.arban-mag.com/article/76910), 2023-04-28; updated 2026-05-22.
 2. Time Out Tokyo — [ミュージックバー 道](https://www.timeout.jp/tokyo/ja/%E3%83%90%E3%83%BC/michi), 2025-02-04.
 3. ARBAN / 富山英三郎 — [【東京・富士見ヶ丘 ヨシダベーカリー】レコードバーにも変身する美味しいベーカリー](https://www.arban-mag.com/article/113666), 2026-08-28.
-4. Resident Advisor — [Japan's Hidden Listening Bars: SHeLTeR](https://ra.co/features/3496), 2019-07-11.
+4. ARBAN / 富山英三郎 — [【東京・西荻窪／JUDGMENT! RECORDS lounge】上質な音・酒・珈琲が楽しめる癒しのラウンジ空間](https://www.arban-mag.com/article/113320), 2026-06-26.
+5. Resident Advisor — [Japan's Hidden Listening Bars: SHeLTeR](https://ra.co/features/3496), 2019-07-11.
 Stories about multiple venues, neighborhoods, temporary events, closed venues, or ambiguous destinations remain outside the published shelf. LADY JANE was removed after its reviewed Google Maps result reported the venue permanently closed.

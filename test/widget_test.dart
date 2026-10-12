@@ -111,14 +111,22 @@ void main() {
     expect(find.text('RESIDENT ADVISOR'), findsAtLeastNWidgets(2));
     expect(find.byKey(const ValueKey('read-tonlist')), findsOneWidget);
     expect(find.byKey(const ValueKey('read-yoshida-bakery')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('read-judgment-records-lounge')),
+      findsOneWidget,
+    );
     expect(find.byKey(const ValueKey('read-shelter-film')), findsOneWidget);
-    expect(find.text('4本'), findsOneWidget);
+    expect(find.text('5本'), findsOneWidget);
     expect(
       find.byKey(const ValueKey('read-thumbnail-tonlist')),
       findsOneWidget,
     );
     expect(
       find.byKey(const ValueKey('read-thumbnail-yoshida-bakery')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('read-thumbnail-judgment-records-lounge')),
       findsOneWidget,
     );
     expect(find.text('すべて'), findsOneWidget);
@@ -137,7 +145,7 @@ void main() {
     await tester.pumpAndSettle();
     await openJapaneseReading(tester);
 
-    expect(curatedArticles, hasLength(4));
+    expect(curatedArticles, hasLength(5));
     for (final article in curatedArticles) {
       expect(article.googleMapsUri.host, 'www.google.com');
       expect(article.googleMapsUri.path, '/maps/search/');
