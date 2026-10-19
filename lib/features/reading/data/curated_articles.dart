@@ -23,6 +23,31 @@ final curatedArticles = <CuratedArticle>[
     featured: true,
   ),
   CuratedArticle(
+    id: 'little-soul-cafe',
+    source: 'The Infatuation',
+    author: 'Kiera Wright-Ruiz',
+    dateLabel: '2026.10.12',
+    titleJa: '下北沢 リトル・ソウル・カフェ——1万4千枚のソウル盤が並ぶ夜',
+    titleEn:
+        'Little Soul Cafe: 14,000 records and a classic Shimokitazawa night',
+    noteJa: '1999年から続く七席のバー。壁を埋めるレコードから店主がソウルやファンクを選び、カクテルをつくる夜の景色を伝える。',
+    noteEn:
+        'A compact portrait of a seven-seat bar where the owner pulls soul and funk from a 14,000-record collection while mixing drinks.',
+    tagsJa: ['下北沢', 'ソウル', '深夜'],
+    tagsEn: ['Shimokitazawa', 'Soul', 'Late'],
+    url: Uri.parse(
+      'https://www.theinfatuation.com/tokyo/reviews/little-soul-cafe',
+    ),
+    googleMapsUri: _googleMapsSearch('Little Soul Cafe 下北沢 東京'),
+    facets: {
+      ArticleFacet.english,
+      ArticleFacet.neighborhood,
+      ArticleFacet.people,
+      ArticleFacet.sound,
+    },
+    visitorPick: true,
+  ),
+  CuratedArticle(
     id: 'music-bar-michi',
     source: 'Time Out Tokyo',
     author: 'Time Out Tokyo',

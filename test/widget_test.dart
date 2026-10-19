@@ -110,13 +110,14 @@ void main() {
     expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
     expect(find.text('RESIDENT ADVISOR'), findsAtLeastNWidgets(2));
     expect(find.byKey(const ValueKey('read-tonlist')), findsOneWidget);
+    expect(find.byKey(const ValueKey('read-little-soul-cafe')), findsOneWidget);
     expect(find.byKey(const ValueKey('read-yoshida-bakery')), findsOneWidget);
     expect(
       find.byKey(const ValueKey('read-judgment-records-lounge')),
       findsOneWidget,
     );
     expect(find.byKey(const ValueKey('read-shelter-film')), findsOneWidget);
-    expect(find.text('5本'), findsOneWidget);
+    expect(find.text('6本'), findsOneWidget);
     expect(
       find.byKey(const ValueKey('read-thumbnail-tonlist')),
       findsOneWidget,
@@ -145,7 +146,7 @@ void main() {
     await tester.pumpAndSettle();
     await openJapaneseReading(tester);
 
-    expect(curatedArticles, hasLength(5));
+    expect(curatedArticles, hasLength(6));
     for (final article in curatedArticles) {
       expect(article.googleMapsUri.host, 'www.google.com');
       expect(article.googleMapsUri.path, '/maps/search/');
@@ -167,8 +168,9 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('reading-filter-english')));
     await tester.pumpAndSettle();
 
-    expect(find.text('1本'), findsOneWidget);
+    expect(find.text('2本'), findsOneWidget);
     expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
+    expect(find.byKey(const ValueKey('read-little-soul-cafe')), findsOneWidget);
     expect(find.byKey(const ValueKey('read-shelter-film')), findsOneWidget);
     expect(
       find.byKey(const ValueKey('read-tokyo-record-cafe-tour')),
@@ -179,11 +181,12 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('reading-filter-neighborhood')));
     await tester.pumpAndSettle();
 
-    expect(find.text('0本'), findsOneWidget);
+    expect(find.text('1本'), findsOneWidget);
+    expect(find.byKey(const ValueKey('read-little-soul-cafe')), findsOneWidget);
     expect(find.text('まず、この一本'), findsNothing);
-    expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsNothing);
+    expect(find.text('VISITOR’S VIEW / 海外から見る東京'), findsOneWidget);
     expect(find.text('読む棚から'), findsNothing);
-    expect(find.text('この条件に合う記事はありません。'), findsOneWidget);
+    expect(find.text('この条件に合う記事はありません。'), findsNothing);
   });
 
   testWidgets('selects a venue from the editorial map', (tester) async {
