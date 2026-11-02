@@ -23,6 +23,28 @@ final curatedArticles = <CuratedArticle>[
     featured: true,
   ),
   CuratedArticle(
+    id: 'hi-fi-disco-bar-chaos',
+    source: 'Time Out Tokyo',
+    author: 'Time Out Tokyo',
+    dateLabel: '2026.10.29',
+    titleJa: '渋谷 Hi-Fi Disco Bar Chaos——70年代NYのディスコを、いまの音で',
+    titleEn: 'Hi-Fi Disco Bar Chaos: 1970s New York through a Shibuya lens',
+    noteJa: 'ラリー・レヴァンらが築いたクラブ文化への敬意を、往年のDJ機材とハウス、ディスコの選曲へ落とし込んだ渋谷の一軒。',
+    noteEn:
+        'A concise guide to a Shibuya listening bar shaped by 1970s New York club culture, vintage DJ equipment, house and disco.',
+    tagsJa: ['渋谷', 'ハウス', 'ディスコ'],
+    tagsEn: ['Shibuya', 'House', 'Disco'],
+    url: Uri.parse('https://www.timeout.com/tokyo/music/hi-fi-disco-bar-chaos'),
+    googleMapsUri: _googleMapsSearch('Hi-Fi Disco Bar Chaos 渋谷 東京'),
+    facets: {
+      ArticleFacet.english,
+      ArticleFacet.neighborhood,
+      ArticleFacet.sound,
+      ArticleFacet.practical,
+    },
+    visitorPick: true,
+  ),
+  CuratedArticle(
     id: 'little-soul-cafe',
     source: 'The Infatuation',
     author: 'Kiera Wright-Ruiz',
